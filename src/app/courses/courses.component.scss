@@ -1,0 +1,163 @@
+.container{
+  background-image: url(/assets/m.jpg);
+}
+.skills {
+  direction: rtl;
+  text-align: right;
+  font-family: "IRANSans", sans-serif;
+  background: #f8f9ff;
+  padding: 2rem;
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border-radius: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    padding: 1.2rem 1.5rem;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  &__right {
+    flex: 0 0 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  }
+
+  &__left {
+    flex: 1;
+    padding-right: 1.5rem;
+  }
+
+  &__name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  &__teacher {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.5rem;
+  }
+
+  &__desc {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+
+  &__students {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+
+  &__rating {
+    color: #f7b500;
+    margin-bottom: 1rem;
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 0.8rem;
+  }
+
+  &__discount {
+    background: #e0f7ef;
+    color: #1bb67f;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+  }
+
+  &__buy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__btn {
+    background: #ff4b5c;
+    color: #fff;
+    border: none;
+    outline: none;
+    font-size: 0.85rem;
+    border-radius: 1.2rem;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: #e93c4c;
+    }
+  }
+
+  &__amount {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+  }
+}
+
+
+.line{
+  transform: rotate(90deg);
+  // transform-origin: top left;
+  color:#666;
+}
+
+
+.box{
+  font-size: 12px;
+  width: 60px;
+  height: 60px;
+  align-items: center;
+}
+
+
+.glass-box{
+  background: rgb(225, 225, 225, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.bg{
+ 
+  background: linear-gradient(52deg, #ffffff, #e4ccff, #eec9e7, #e7cff6);
+  backdrop-filter: blur(10px);
+  border: rgb(225, 225, 225, 0.2);
+}
