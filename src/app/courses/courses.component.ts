@@ -14,7 +14,7 @@ export class CoursesComponent {
   courses = [
     {
       teacher: 'مهندس علی رضایی',
-      desc: 'یادگیری روش‌های علمی برای افزایش بهره‌وری شخصیی',
+      desc: ' یادگیری روش‌های علمی برای افزایش بهره‌وری شخصیی',
       students: 1250,
       rating: 5,
       discount: 50,
@@ -32,6 +32,14 @@ export class CoursesComponent {
       students: 1250,
       rating: 5,
       discount: 50,
+    },
+    {
+      teacher: 'مهندس علی رضایی',
+      desc: 'برنامه‌ریزی هوشمند برای استفاده بهتر از زمان در پروژه‌ها',
+      students: 1250,
+      rating: 5,
+      discount: 50,
     }
   ];
+  
 }
