@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { CoursesComponent } from './courses/courses.component';
-import { RouterModule } from '@angular/router';
-// import { AppRoutingModule } from './app.routes';
+import { RoadmapComponent } from './roadmap/roadmap.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule, CoursesComponent],
+  imports: [RoadmapComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {}

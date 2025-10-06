@@ -1,0 +1,56 @@
+.road-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 100px auto 0; // فاصله از بالا و وسط‌چینی افقی
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .svg-wrapper {
+    width: 100%;
+    height: auto;
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  circle {
+    pointer-events: all;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    // &:hover {
+    //   transform: scale(1.2);
+    // }
+  }
+
+  .tooltip {
+    background: #2b2b2b;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 14px;
+    direction: rtl;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    margin: auto;
+  }
+}

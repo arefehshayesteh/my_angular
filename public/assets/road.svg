@@ -1,0 +1,31 @@
+<svg
+  viewBox="0 0 1000 400"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- پس‌زمینه سفید -->
+  <rect width="1000" height="400" fill="white"/>
+
+  <!-- مسیر جاده -->
+  <path
+    id="roadPath"
+    d="M 0 250 
+       C 200 150, 300 350, 500 250 
+       S 800 150, 1000 250"
+    fill="none"
+    stroke="#2b2b2b"
+    stroke-width="60"
+    stroke-linecap="round"
+  />
+
+  <!-- خط وسط جاده -->
+  <path
+    d="M 0 250 
+       C 200 150, 300 350, 500 250 
+       S 800 150, 1000 250"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="8"
+    stroke-dasharray="30 20"
+    stroke-linecap="round"
+  />
+</svg>
