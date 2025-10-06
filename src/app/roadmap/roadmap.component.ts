@@ -1,5 +1,16 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+interface RoadItem {
+  title: string;
+  description: string;
+}
 
 interface Point {
   id: number;
@@ -18,6 +29,14 @@ interface Point {
 export class RoadmapComponent implements AfterViewInit {
   @ViewChild('svgContainer', { static: true }) svgContainer!: ElementRef<HTMLDivElement>;
 
+  data: RoadItem[] = [
+    { title: 'شروع پروژه', description: 'تحلیل نیازمندی‌ها' },
+    { title: 'طراحی اولیه', description: 'ساخت وایرفریم و UI' },
+    { title: 'توسعه', description: 'کدنویسی و پیاده‌سازی' },
+    { title: 'تست', description: 'بررسی و رفع باگ‌ها' },
+   
+  ];
+
   points: Point[] = [];
   hoveredPoint: Point | null = null;
 
@@ -35,14 +54,16 @@ export class RoadmapComponent implements AfterViewInit {
     }
 
     const pathLength = path.getTotalLength();
-    const numPoints = 20; // ← تعداد دلخواه توپ‌ها
+    const numPoints = this.data.length;
 
     const newPoints: Point[] = [];
-    for (let i = 1; i <= numPoints; i++) {
-      const pt = path.getPointAtLength((i / (numPoints + 1)) * pathLength);
+    for (let i = 0; i < numPoints; i++) {
+      const pt = path.getPointAtLength(((i + 1) / (numPoints + 1)) * pathLength);
+      const percent = Math.round(((i + 1) / numPoints) * 100);
+
       newPoints.push({
-        id: i,
-        label: `مرحله ${i}`,
+        id: i + 1,
+        label: `${this.data[i].title} - ${percent}%`,
         x: pt.x,
         y: pt.y
       });
