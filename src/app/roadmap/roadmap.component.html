@@ -1,43 +1,111 @@
-<div class="roadmap-container" (click)="closeTooltip()">
-  <!-- SVG پس‌زمینه -->
-  <div #svgContainer class="svg-bg"></div>
+<div class="road-container">
+  <div class="svg-wrapper" #svgContainer></div>
 
-  <!-- نقاط روی مسیر -->
-  <svg viewBox="0 0 1000 400" class="overlay" xmlns="http://www.w3.org/2000/svg">
-    <ng-container *ngFor="let p of points">
+  <svg
+    *ngIf="points.length > 0"
+    viewBox="0 0 1000 400"
+    xmlns="http://www.w3.org/2000/svg"
+    class="overlay"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    <ng-container *ngFor="let point of points">
+      <!-- مراحل -->
       <circle
-        [attr.cx]="p.x"
-        [attr.cy]="p.y"
-        [attr.r]="p.isStep ? 6 : 10"
-        [attr.fill]="p.isStep ? getStepColor(p) : getColor(p)"
+        *ngIf="point.isStep"
+        [attr.cx]="point.x"
+        [attr.cy]="point.y"
+        r="6"
+        [attr.fill]="getStepColor(point.stepDone, !!point.isLocked)"
         stroke="#2b2b2b"
         stroke-width="2"
-        class="point"
-        (click)="toggleTooltip(p, $event)"
+        (mouseenter)="!point.isLocked && (hoveredPoint = point)"
+        (mouseleave)="hoveredPoint = null"
       ></circle>
-    </ng-container>
-  </svg>
 
-  <!-- تولتیپ -->
-  <div
-    *ngIf="activePoint"
-    class="tooltip"
-    [ngStyle]="{
-      left: activePoint.x + 'px',
-      top: activePoint.y - 20 + 'px'
-    }"
-    (click)="$event.stopPropagation()"
+      <!-- اهداف -->
+      <circle
+        *ngIf="!point.isStep"
+        [attr.cx]="point.x"
+        [attr.cy]="point.y"
+        r="12"
+        [attr.fill]="getColor(point.progress, !!point.isLocked)"
+        stroke="#2b2b2b"
+        stroke-width="3"
+        (mouseenter)="!point.isLocked && (hoveredPoint = point)"
+        (mouseleave)="hoveredPoint = null"
+      ></circle>
+
+      <!-- Tooltip -->
+      <!-- <g *ngIf="hoveredPoint?.id === point.id">
+        <rect
+          [attr.x]="point.x - 60"
+          [attr.y]="point.y + 20"
+          rx="6"
+          ry="6"
+          width="120"
+          height="40"
+          fill="#2b2b2b"
+          stroke="#444"
+          stroke-width="1"
+        ></rect>
+        <text
+          [attr.x]="point.x"
+          [attr.y]="point.y + 45"
+          text-anchor="middle"
+          fill="#fff"
+          font-size="12"
+          font-family="sans-serif"
+        >
+          {{ point.label }}
+        </text>
+      </g> -->
+
+      <!-- Tooltip -->
+<g *ngIf="hoveredPoint?.id === point.id">
+  <rect
+    [attr.x]="point.x - 70"
+    [attr.y]="point.y + 20"
+    rx="6"
+    ry="6"
+    width="140"
+    height="60"
+    fill="#2b2b2b"
+    stroke="#444"
+    stroke-width="1"
+  ></rect>
+
+  <text
+    [attr.x]="point.x"
+    [attr.y]="point.y + 40"
+    text-anchor="middle"
+    fill="#fff"
+    font-size="12"
+    font-family="sans-serif"
   >
-    <strong>{{ activePoint.label }}</strong>
-    <div *ngIf="activePoint.isStep">
+    {{ point.label }}
+  </text>
+
+  <!-- فقط برای مراحل -->
+  <foreignObject
+    *ngIf="point.isStep"
+    [attr.x]="point.x - 60"
+    [attr.y]="point.y + 45"
+    width="120"
+    height="30"
+  >
+    <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-checkbox">
       <label>
         <input
           type="checkbox"
-          [checked]="activePoint.stepDone"
-          (change)="toggleStep(activePoint)"
+          [checked]="point.stepDone"
+          (change)="toggleStep(point)"
         />
         انجام شد
       </label>
     </div>
-  </div>
+  </foreignObject>
+</g>
+
+    </ng-container>
+  </svg>
 </div>
