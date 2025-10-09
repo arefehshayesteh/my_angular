@@ -52,6 +52,12 @@ export class RoadmapComponent implements AfterViewInit {
         { name: 'مرحله ۱', done: true, locked: false },
         { name: 'مرحله ۲', done: false, locked: true },
         { name: 'مرحله ۳', done: false, locked: true },
+        { name: 'مرحله ۱', done: true, locked: false },
+        { name: 'مرحله ۲', done: true, locked: false },
+        { name: 'مرحله ۳', done: true, locked: false },
+        { name: 'مرحله ۴', done: true, locked: false },
+        { name: 'مرحله ۵', done: false, locked: true },
+        { name: 'مرحله ۶', done: false, locked: true },
       ],
     },
     {
@@ -65,19 +71,7 @@ export class RoadmapComponent implements AfterViewInit {
         { name: 'مرحله ۴', done: false, locked: true },
       ],
     },
-    {
-      title: 'هدف ۳',
-      description: 'توضیحات هدف ۳',
-      unlocked: false,
-      steps: [
-        { name: 'مرحله ۱', done: true, locked: false },
-        { name: 'مرحله ۲', done: true, locked: false },
-        { name: 'مرحله ۳', done: true, locked: false },
-        { name: 'مرحله ۴', done: true, locked: false },
-        { name: 'مرحله ۵', done: false, locked: true },
-        { name: 'مرحله ۶', done: false, locked: true },
-      ],
-    },
+    
   ];
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -92,66 +86,82 @@ export class RoadmapComponent implements AfterViewInit {
     const svgResponse = await fetch('assets/road.svg');
     const svgText = await svgResponse.text();
     container.innerHTML = svgText;
-
+  
     const svgEl = container.querySelector('svg');
     const path = svgEl.querySelector('#roadPath');
     if (!path) return;
-
+  
     const pathLength = path.getTotalLength();
-
-    // پیدا کردن هدف اصلی
+  
+    // 🔹 هدف اصلی = هدف با بیشترین مراحل
     this.mainGoalIndex = this.roadmap.reduce(
       (maxIdx, g, i, arr) =>
         g.steps.length > arr[maxIdx].steps.length ? i : maxIdx,
       0
     );
+  
     const mainGoal = this.roadmap[this.mainGoalIndex];
-    const mainSteps = mainGoal.steps.length;
-
-    // جمع کل مراحل برای تمام اهداف
-    const totalSteps = this.roadmap.reduce(
-      (sum, g) => sum + g.steps.length + 1, // +1 برای خود هدف
-      0
-    );
-
-    // فاصله مساوی برای کل مسیر
-    const stepDistance = pathLength / (totalSteps + 1);
+    const totalMainSteps = mainGoal.steps.length;
+  
+    const stepDistance = pathLength / (totalMainSteps + 2);
     const newPoints: Point[] = [];
-
+  
+    // 🔹 نقاط هدف اصلی (تمام مراحلش + خودش)
     let currentLength = stepDistance;
-    this.roadmap.forEach((goal, gIndex) => {
-      goal.steps.forEach((_, sIndex) => {
-        const pt = path.getPointAtLength(currentLength);
-        newPoints.push({
-          id: `goal${gIndex}-step${sIndex}`,
-          x: pt.x,
-          y: pt.y,
-          type: 'step',
-          goalIndex: gIndex,
-          stepIndex: sIndex,
-        });
-        currentLength += stepDistance;
-      });
-
-      // نقطه هدف
+    for (let i = 0; i < totalMainSteps; i++) {
       const pt = path.getPointAtLength(currentLength);
       newPoints.push({
-        id: `goal${gIndex}`,
+        id: `main-step-${i}`,
         x: pt.x,
         y: pt.y,
-        type: 'goal',
-        goalIndex: gIndex,
+        type: 'step',
+        goalIndex: this.mainGoalIndex,
+        stepIndex: i,
       });
       currentLength += stepDistance;
+    }
+  
+    // 🔹 نقطه نهایی هدف اصلی
+    const lastPt = path.getPointAtLength(currentLength);
+    newPoints.push({
+      id: `main-goal`,
+      x: lastPt.x,
+      y: lastPt.y,
+      type: 'goal',
+      goalIndex: this.mainGoalIndex,
     });
-
-    // درصد پیشرفت هدف اصلی
-    const done = mainGoal.steps.filter((s) => s.done).length;
-    this.progressPercent = Math.round((done / mainSteps) * 100);
-
+  
+    // 🔹 بقیه اهداف کوچکتر را روی مسیر هدف اصلی مپ کن
+    this.roadmap.forEach((goal, gIndex) => {
+      if (gIndex === this.mainGoalIndex) return;
+  
+      const relativeStep = Math.min(goal.steps.length, totalMainSteps - 1);
+      const mainPoint = newPoints.find(
+        (p) => p.stepIndex === relativeStep - 1 && p.type === 'step'
+      );
+  
+      if (mainPoint) {
+        newPoints.push({
+          id: `goal${gIndex}`,
+          x: mainPoint.x,
+          y: mainPoint.y,
+          type: 'goal',
+          goalIndex: gIndex,
+        });
+      }
+    });
+  
     this.points = newPoints;
+    this.updateProgress();
     this.cdr.detectChanges();
   }
+  
+  updateProgress() {
+    const mainGoal = this.roadmap[this.mainGoalIndex];
+    const done = mainGoal.steps.filter((s) => s.done).length;
+    this.progressPercent = Math.round((done / mainGoal.steps.length) * 100);
+  }
+  
 
   openTooltip(goalIndex: number, event: MouseEvent) {
     event.stopPropagation(); // جلوگیری از بسته شدن تولتیپ
