@@ -1,40 +1,43 @@
-<div class="road-container">
-    <div class="svg-wrapper" #svgContainer></div>
-  
-    <svg *ngIf="points.length > 0" viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg" class="overlay" preserveAspectRatio="xMidYMid meet">
-      <ng-container *ngFor="let point of points">
-        <circle
-          [attr.cx]="point.x"
-          [attr.cy]="point.y"
-          r="10"
-          fill="#ffb703"
-          stroke="#2b2b2b"
-          stroke-width="3"
-          (mouseenter)="hoveredPoint = point"
-          (mouseleave)="hoveredPoint = null"
-        ></circle>
-  
-        <line
-          *ngIf="hoveredPoint?.id === point.id"
-          [attr.x1]="point.x"
-          [attr.y1]="point.y + 15"
-          [attr.x2]="point.x"
-          [attr.y2]="point.y + 60"
-          stroke="#999"
-          stroke-width="2"
-          stroke-dasharray="4 4"
-        ></line>
-  
-        <foreignObject
-          *ngIf="hoveredPoint?.id === point.id"
-          [attr.x]="point.x - 50"
-          [attr.y]="point.y + 65"
-          width="120"
-          height="60"
-        >
-          <div class="tooltip">{{ point.label }}</div>
-        </foreignObject>
-      </ng-container>
-    </svg>
+<div class="roadmap-container" (click)="closeTooltip()">
+  <!-- SVG پس‌زمینه -->
+  <div #svgContainer class="svg-bg"></div>
+
+  <!-- نقاط روی مسیر -->
+  <svg viewBox="0 0 1000 400" class="overlay" xmlns="http://www.w3.org/2000/svg">
+    <ng-container *ngFor="let p of points">
+      <circle
+        [attr.cx]="p.x"
+        [attr.cy]="p.y"
+        [attr.r]="p.isStep ? 6 : 10"
+        [attr.fill]="p.isStep ? getStepColor(p) : getColor(p)"
+        stroke="#2b2b2b"
+        stroke-width="2"
+        class="point"
+        (click)="toggleTooltip(p, $event)"
+      ></circle>
+    </ng-container>
+  </svg>
+
+  <!-- تولتیپ -->
+  <div
+    *ngIf="activePoint"
+    class="tooltip"
+    [ngStyle]="{
+      left: activePoint.x + 'px',
+      top: activePoint.y - 20 + 'px'
+    }"
+    (click)="$event.stopPropagation()"
+  >
+    <strong>{{ activePoint.label }}</strong>
+    <div *ngIf="activePoint.isStep">
+      <label>
+        <input
+          type="checkbox"
+          [checked]="activePoint.stepDone"
+          (change)="toggleStep(activePoint)"
+        />
+        انجام شد
+      </label>
+    </div>
   </div>
-  
+</div>

@@ -7,16 +7,25 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface RoadItem {
+interface Step {
+  name: string;
+  done: boolean;
+}
+
+interface Goal {
   title: string;
-  description: string;
+  steps: Step[];
 }
 
 interface Point {
   id: number;
-  label: string;
   x: number;
   y: number;
+  label: string;
+  isStep?: boolean;
+  stepDone?: boolean;
+  isLocked?: boolean;
+  progress?: number;
 }
 
 @Component({
@@ -29,47 +38,123 @@ interface Point {
 export class RoadmapComponent implements AfterViewInit {
   @ViewChild('svgContainer', { static: true }) svgContainer!: ElementRef<HTMLDivElement>;
 
-  data: RoadItem[] = [
-    { title: 'شروع پروژه', description: 'تحلیل نیازمندی‌ها' },
-    { title: 'طراحی اولیه', description: 'ساخت وایرفریم و UI' },
-    { title: 'توسعه', description: 'کدنویسی و پیاده‌سازی' },
-    { title: 'تست', description: 'بررسی و رفع باگ‌ها' },
-   
+  goals: Goal[] = [
+    {
+      title: 'هدف اول',
+      steps: [
+        { name: 'مرحله ۱', done: true },
+        { name: 'مرحله ۲', done: false }
+      ]
+    },
+    {
+      title: 'هدف دوم',
+      steps: [
+        { name: 'مرحله ۱', done: false },
+        { name: 'مرحله ۲', done: false }
+      ]
+    },
+    {
+      title: 'هدف سوم',
+      steps: [
+        { name: 'مرحله ۱', done: false }
+      ]
+    }
   ];
 
   points: Point[] = [];
-  hoveredPoint: Point | null = null;
+  activePoint: Point | null = null;
 
   constructor(private cd: ChangeDetectorRef) {}
+
+  getProgress(goal: Goal): number {
+    const total = goal.steps.length;
+    const done = goal.steps.filter(s => s.done).length;
+    return Math.round((done / total) * 100);
+  }
 
   async ngAfterViewInit() {
     const response = await fetch('assets/road.svg');
     const svgText = await response.text();
     this.svgContainer.nativeElement.innerHTML = svgText;
 
-    const path = this.svgContainer.nativeElement.querySelector('#roadPath') as SVGPathElement | null;
+    const path = this.svgContainer.nativeElement.querySelector('#roadPath') as SVGPathElement;
     if (!path) {
-      console.error('مسیر roadPath پیدا نشد');
+      console.error('❌ مسیر roadPath پیدا نشد.');
       return;
     }
 
     const pathLength = path.getTotalLength();
-    const numPoints = this.data.length;
+    const totalPoints = this.goals.reduce((sum, g) => sum + g.steps.length + 1, 0);
+    const stepDistance = pathLength / (totalPoints + 1);
+    let currentLength = stepDistance;
 
-    const newPoints: Point[] = [];
-    for (let i = 0; i < numPoints; i++) {
-      const pt = path.getPointAtLength(((i + 1) / (numPoints + 1)) * pathLength);
-      const percent = Math.round(((i + 1) / numPoints) * 100);
+    const generated: Point[] = [];
+    let locked = false;
 
-      newPoints.push({
-        id: i + 1,
-        label: `${this.data[i].title} - ${percent}%`,
-        x: pt.x,
-        y: pt.y
+    for (const goal of this.goals) {
+      // مراحل هر هدف
+      for (const step of goal.steps) {
+        const pt = path.getPointAtLength(currentLength);
+        generated.push({
+          id: generated.length + 1,
+          label: step.name,
+          x: pt.x,
+          y: pt.y,
+          isStep: true,
+          stepDone: step.done,
+          isLocked: locked
+        });
+        currentLength += stepDistance;
+      }
+
+      // خود هدف
+      const goalPt = path.getPointAtLength(currentLength);
+      const progress = this.getProgress(goal);
+      generated.push({
+        id: generated.length + 1,
+        label: `${goal.title} (${progress}%)`,
+        x: goalPt.x,
+        y: goalPt.y,
+        progress,
+        isLocked: locked
       });
+
+      // قفل شدن هدف‌های بعدی
+      if (progress < 100) locked = true;
+      currentLength += stepDistance;
     }
 
-    this.points = newPoints;
+    this.points = generated;
     this.cd.detectChanges();
+  }
+
+  getColor(p: Point): string {
+    if (p.isLocked) return '#bbb';
+    if (p.progress === 100) return '#4caf50';
+    if (p.progress && p.progress >= 50) return '#ffb703';
+    return '#f7b500';
+  }
+
+  getStepColor(p: Point): string {
+    if (p.isLocked) return '#bbb';
+    return p.stepDone ? '#4caf50' : '#8e44ad';
+  }
+
+  toggleTooltip(p: Point, event: MouseEvent) {
+    event.stopPropagation();
+    console.log('clicked on:', p.label);
+    this.activePoint = p;
+    this.cd.detectChanges();
+  }
+  
+  
+
+  toggleStep(p: Point) {
+    if (p.isLocked) return;
+    p.stepDone = !p.stepDone;
+  }
+
+  closeTooltip() {
+    this.activePoint = null;
   }
 }
