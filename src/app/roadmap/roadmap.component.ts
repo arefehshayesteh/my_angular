@@ -49,6 +49,7 @@ export class RoadmapComponent implements AfterViewInit {
         { name: 'جلسه با کارفرما', done: false },
         { name: 'نوشتن داکیومنت نیازمندی', done: false },
         { name: 'تایید نهایی', done: false }
+        
       ]
     },
     {
@@ -174,10 +175,18 @@ for (let i = 0; i < goal.steps.length; i++) {
   toggleTooltip(point: Point) {
     if (this.hoveredPoint?.id === point.id) {
       this.hoveredPoint = null;
-    } else if (!point.isLocked) {
-      this.hoveredPoint = point;
+    } else {
+      // برای اهداف (توپ‌های بزرگ) همیشه تولتیپ رو نشون بده
+      if (!point.isStep) {
+        this.hoveredPoint = point;
+      } 
+      // برای مراحل فقط اگر قفل نیست
+      else if (!point.isLocked) {
+        this.hoveredPoint = point;
+      }
     }
   }
+  
 
   toggleStep(point: Point) {
     if (!point.isStep || point.isLocked) return;
