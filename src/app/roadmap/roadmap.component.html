@@ -3,22 +3,56 @@
 
   <svg *ngIf="points.length" viewBox="0 0 1000 400" class="overlay">
     <ng-container *ngFor="let p of points">
-      <!-- نقاط مراحل -->
-      <circle
+      <!-- مراحل هدف اصلی -->
+      <g
         *ngIf="p.type === 'step'"
-        [attr.cx]="p.x"
-        [attr.cy]="p.y - 5"
-        r="5"
-        fill="#ccc"
-        stroke="#222"
-        stroke-width="1"
-      ></circle>
+        (click)="openTooltip(p.goalIndex, p.stepIndex!, $event)"
+        style="cursor: pointer"
+      >
+        <circle
+          [attr.cx]="p.x"
+          [attr.cy]="p.y - 5"
+          r="8"
+          [attr.fill]="
+            roadmap[p.goalIndex].steps[p.stepIndex!].done
+              ? '#00cc66'
+              : roadmap[p.goalIndex].steps[p.stepIndex!].locked
+              ? '#999'
+              : '#ccc'
+          "
+          stroke="#333"
+          stroke-width="1"
+        ></circle>
+
+        <!-- تولتیپ مرحله -->
+        <foreignObject
+          *ngIf="
+            tooltip &&
+            tooltip.goalIndex === p.goalIndex &&
+            tooltip.stepIndex === p.stepIndex
+          "
+          [attr.x]="p.x - 60"
+          [attr.y]="p.y - 90"
+          width="120"
+          height="70"
+        >
+          <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-box">
+            <strong>{{ roadmap[p.goalIndex].steps[p.stepIndex!].name }}</strong
+            ><br />
+            <label>
+              <input
+                type="checkbox"
+                [checked]="roadmap[p.goalIndex].steps[p.stepIndex!].done"
+                (click)="toggleStep(p.goalIndex, p.stepIndex!); $event.stopPropagation()"
+              />
+              انجام شد
+            </label>
+          </div>
+        </foreignObject>
+      </g>
 
       <!-- هدف اصلی -->
-      <g
-        *ngIf="p.type === 'goal' && p.goalIndex === mainGoalIndex"
-        (click)="openTooltip(p.goalIndex, $event)"
-      >
+      <g *ngIf="p.type === 'goal' && p.goalIndex === mainGoalIndex">
         <image
           [attr.x]="p.x - 25"
           [attr.y]="p.y - 35"
@@ -26,9 +60,7 @@
           height="50"
           href="assets/point 3.svg"
         ></image>
-
         <foreignObject
-          *ngIf="tooltipGoal === mainGoalIndex"
           [attr.x]="p.x - 80"
           [attr.y]="p.y - 100"
           width="160"
@@ -36,11 +68,6 @@
         >
           <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-box">
             <strong>{{ roadmap[p.goalIndex].title }}</strong><br />
-            آخرین مرحله:
-            {{
-              roadmap[p.goalIndex].steps[roadmap[p.goalIndex].steps.length - 1]
-                .name
-            }}<br />
             درصد پیشرفت: {{ progressPercent }}٪
           </div>
         </foreignObject>
