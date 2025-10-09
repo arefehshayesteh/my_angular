@@ -3,31 +3,30 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Step {
   name: string;
   done: boolean;
+  locked: boolean;
 }
 
 interface RoadItem {
   title: string;
   description: string;
   steps: Step[];
+  unlocked: boolean;
 }
 
 interface Point {
-  id: number;
-  label: string;
+  id: string;
   x: number;
   y: number;
-  progress: number;
-  isStep?: boolean;
-  stepName?: string;
-  stepDone?: boolean;
-  isLocked?: boolean;
+  type: 'goal' | 'step';
+  goalIndex: number;
+  stepIndex?: number;
 }
 
 @Component({
@@ -35,209 +34,131 @@ interface Point {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './roadmap.component.html',
-  styleUrls: ['./roadmap.component.scss']
+  styleUrls: ['./roadmap.component.scss'],
 })
 export class RoadmapComponent implements AfterViewInit {
-  @ViewChild('svgContainer', { static: true })
-  svgContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
+  points: Point[] = [];
+  tooltipGoal: number | null = null;
+  mainGoalIndex: number = 0;
+  progressPercent: number = 0;
 
-  data: RoadItem[] = [
+  roadmap: RoadItem[] = [
     {
-      title: 'شروع پروژه',
-      description: 'تحلیل نیازمندی‌ها',
+      title: 'هدف ۱',
+      description: 'توضیحات هدف ۱',
+      unlocked: true,
       steps: [
-        { name: 'جلسه با کارفرما', done: false },
-        { name: 'نوشتن داکیومنت نیازمندی', done: false },
-        { name: 'تایید نهایی', done: false }
-        
-      ]
+        { name: 'مرحله ۱', done: true, locked: false },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۳', done: false, locked: true },
+      ],
     },
     {
-      title: 'طراحی اولیه',
-      description: 'ساخت وایرفریم و UI',
+      title: 'هدف ۲',
+      description: 'توضیحات هدف ۲',
+      unlocked: false,
       steps: [
-        { name: 'طراحی وایرفریم', done: false },
-        { name: 'UI در Figma', done: false }
-      ]
+        { name: 'مرحله ۱', done: true, locked: false },
+        { name: 'مرحله ۲', done: true, locked: false },
+        { name: 'مرحله ۳', done: false, locked: false },
+        { name: 'مرحله ۴', done: false, locked: true },
+      ],
     },
     {
-      title: 'توسعه',
-      description: 'کدنویسی و پیاده‌سازی',
+      title: 'هدف ۳',
+      description: 'توضیحات هدف ۳',
+      unlocked: false,
       steps: [
-        { name: 'ایجاد پروژه', done: false },
-        { name: 'کدنویسی صفحات', done: false },
-        { name: 'اتصال به API', done: false }
-      ]
+        { name: 'مرحله ۱', done: true, locked: false },
+        { name: 'مرحله ۲', done: true, locked: false },
+        { name: 'مرحله ۳', done: true, locked: false },
+        { name: 'مرحله ۴', done: true, locked: false },
+        { name: 'مرحله ۵', done: false, locked: true },
+        { name: 'مرحله ۶', done: false, locked: true },
+      ],
     },
-    {
-      title: 'تست نهایی',
-      description: 'بررسی و رفع باگ‌ها',
-      steps: [
-        { name: 'تست عملکرد', done: false },
-        { name: 'رفع باگ‌ها', done: false }
-      ]
-    }
   ];
 
-  points: Point[] = [];
-  hoveredPoint: Point | null = null;
-
-  constructor(private cd: ChangeDetectorRef) {}
-
-  getProgress(item: RoadItem): number {
-    const total = item.steps.length;
-    const done = item.steps.filter(s => s.done).length;
-    return total > 0 ? Math.round((done / total) * 100) : 0;
-  }
+  constructor(private cdr: ChangeDetectorRef) {}
 
   async ngAfterViewInit() {
-    const response = await fetch('assets/road.svg');
-    const svgText = await response.text();
-    this.svgContainer.nativeElement.innerHTML = svgText;
+    await this.loadSvgAndGeneratePoints();
+    window.addEventListener('resize', () => this.loadSvgAndGeneratePoints());
+  }
 
-    const path = this.svgContainer.nativeElement.querySelector(
-      '#roadPath'
-    ) as SVGPathElement | null;
+  async loadSvgAndGeneratePoints() {
+    const container = this.svgContainer.nativeElement;
+    const svgResponse = await fetch('assets/road.svg');
+    const svgText = await svgResponse.text();
+    container.innerHTML = svgText;
 
-    if (!path) {
-      console.error('مسیر roadPath پیدا نشد');
-      return;
-    }
+    const svgEl = container.querySelector('svg');
+    const path = svgEl.querySelector('#roadPath');
+    if (!path) return;
 
     const pathLength = path.getTotalLength();
-    const numGoals = this.data.length;
-    const totalSteps = this.data.reduce((sum, g) => sum + g.steps.length, 0);
-    const totalPoints = numGoals + totalSteps;
 
-    const stepDistance = pathLength / (totalPoints + 1);
-    let currentLength = stepDistance;
+    // پیدا کردن هدف اصلی
+    this.mainGoalIndex = this.roadmap.reduce(
+      (maxIdx, g, i, arr) =>
+        g.steps.length > arr[maxIdx].steps.length ? i : maxIdx,
+      0
+    );
+    const mainGoal = this.roadmap[this.mainGoalIndex];
+    const mainSteps = mainGoal.steps.length;
 
+    // جمع کل مراحل برای تمام اهداف
+    const totalSteps = this.roadmap.reduce(
+      (sum, g) => sum + g.steps.length + 1, // +1 برای خود هدف
+      0
+    );
+
+    // فاصله مساوی برای کل مسیر
+    const stepDistance = pathLength / (totalSteps + 1);
     const newPoints: Point[] = [];
-    let prevGoalsDone = true;
 
-    this.data.forEach(goal => {
-      // مراحل درون هر هدف
-      let previousStepDone = prevGoalsDone;
-for (let i = 0; i < goal.steps.length; i++) {
-  const step = goal.steps[i];
-  const pt = path.getPointAtLength(currentLength);
-
-  newPoints.push({
-    id: newPoints.length + 1,
-    label: step.name,
-    x: pt.x,
-    y: pt.y,
-    progress: 0,
-    isStep: true,
-    stepName: step.name,
-    stepDone: step.done,
-    // فقط مرحله اول باز باشه، یا اگر قبلی انجام شده
-    isLocked: i === 0 ? !prevGoalsDone : !goal.steps[i - 1].done
-  });
-
-  currentLength += stepDistance;
-}
-
-      // هدف اصلی
-      const ptGoal = path.getPointAtLength(currentLength);
-      const progress = this.getProgress(goal);
-      const goalDone = progress === 100;
-
-      newPoints.push({
-        id: newPoints.length + 1,
-        label: `${goal.title}`,
-        x: ptGoal.x,
-        y: ptGoal.y,
-        progress,
-        isLocked: !prevGoalsDone
+    let currentLength = stepDistance;
+    this.roadmap.forEach((goal, gIndex) => {
+      goal.steps.forEach((_, sIndex) => {
+        const pt = path.getPointAtLength(currentLength);
+        newPoints.push({
+          id: `goal${gIndex}-step${sIndex}`,
+          x: pt.x,
+          y: pt.y,
+          type: 'step',
+          goalIndex: gIndex,
+          stepIndex: sIndex,
+        });
+        currentLength += stepDistance;
       });
 
-      prevGoalsDone = goalDone;
+      // نقطه هدف
+      const pt = path.getPointAtLength(currentLength);
+      newPoints.push({
+        id: `goal${gIndex}`,
+        x: pt.x,
+        y: pt.y,
+        type: 'goal',
+        goalIndex: gIndex,
+      });
       currentLength += stepDistance;
     });
 
+    // درصد پیشرفت هدف اصلی
+    const done = mainGoal.steps.filter((s) => s.done).length;
+    this.progressPercent = Math.round((done / mainSteps) * 100);
+
     this.points = newPoints;
-    this.cd.detectChanges();
+    this.cdr.detectChanges();
   }
 
-  getColor(progress: number, isLocked: boolean): string {
-    if (isLocked) return '#999999';
-    if (progress === 100) return '#4caf50';
-    if (progress >= 50) return '#ffb703';
-    return '#bdbdbd';
+  openTooltip(goalIndex: number, event: MouseEvent) {
+    event.stopPropagation(); // جلوگیری از بسته شدن تولتیپ
+    if (goalIndex === this.mainGoalIndex) this.tooltipGoal = goalIndex;
   }
 
-  getStepColor(done?: boolean, isLocked?: boolean): string {
-    if (isLocked) return '#999999';
-    return done ? '#4caf50' : '#cccccc';
+  closeTooltip() {
+    this.tooltipGoal = null;
   }
-
-  toggleTooltip(point: Point) {
-    if (this.hoveredPoint?.id === point.id) {
-      this.hoveredPoint = null;
-    } else {
-      // برای اهداف (توپ‌های بزرگ) همیشه تولتیپ رو نشون بده
-      if (!point.isStep) {
-        this.hoveredPoint = point;
-      } 
-      // برای مراحل فقط اگر قفل نیست
-      else if (!point.isLocked) {
-        this.hoveredPoint = point;
-      }
-    }
-  }
-  
-
-  toggleStep(point: Point) {
-    if (!point.isStep || point.isLocked) return;
-
-    point.stepDone = !point.stepDone;
-
-    // پیدا کردن هدف مربوطه
-    const goalIndex = this.data.findIndex(g =>
-      g.steps.some(s => s.name === point.stepName)
-    );
-    if (goalIndex === -1) return;
-
-    const goal = this.data[goalIndex];
-    const stepIndex = goal.steps.findIndex(s => s.name === point.stepName);
-    if (stepIndex === -1) return;
-
-    // بروزرسانی داده اصلی
-    goal.steps[stepIndex].done = point.stepDone;
-
-    // آزاد کردن مرحله بعدی
-    if (point.stepDone && stepIndex + 1 < goal.steps.length) {
-      const nextStepName = goal.steps[stepIndex + 1].name;
-      const nextStepPoint = this.points.find(
-        p => p.isStep && p.stepName === nextStepName
-      );
-      if (nextStepPoint) nextStepPoint.isLocked = false;
-    }
-
-    // بروزرسانی درصد پیشرفت هدف
-    const progress = this.getProgress(goal);
-    const goalPoint = this.points.find(
-      p => !p.isStep && p.label === goal.title
-    );
-    if (goalPoint) goalPoint.progress = progress;
-
-    // اگر هدف کامل شد، هدف بعدی و مراحلش آزاد شوند
-    if (progress === 100 && goalIndex + 1 < this.data.length) {
-      const nextGoal = this.data[goalIndex + 1];
-      const nextSteps = nextGoal.steps.map(s => s.name);
-
-      this.points.forEach(p => {
-        if (
-          nextSteps.includes(p.stepName ?? '') ||
-          p.label === nextGoal.title
-        ) {
-          p.isLocked = false;
-        }
-      });
-    }
-
-    this.cd.detectChanges();
-  }
-  
 }

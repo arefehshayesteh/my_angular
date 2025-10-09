@@ -1,16 +1,14 @@
 .road-container {
   position: relative;
-  width: 90%;
+  width: 95%;
   max-width: 1000px;
-  margin: 80px auto 0;
+  margin: 100px auto 0;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .svg-wrapper {
     width: 100%;
-    height: auto;
-
     svg {
       width: 100%;
       height: auto;
@@ -23,39 +21,17 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: auto;
-    z-index: 10;
-    pointer-events: none;
-
-    circle {
-      pointer-events: all;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      
-    }
-
-    g {
-      pointer-events: all;
-    }
-
-    foreignObject {
-      pointer-events: all;
-    }
+    z-index: 5;
   }
-}
 
-.tooltip-checkbox {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  color: white;
-  direction: rtl;
-  label {
-    cursor: pointer;
-    input {
-      margin-left: 6px;
-      cursor: pointer;
-    }
+  .tooltip-box {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 12px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
   }
 }
