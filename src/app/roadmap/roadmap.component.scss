@@ -24,15 +24,22 @@
     left: 0;
     width: 100%;
     height: auto;
-    pointer-events: none;
     z-index: 10;
-  }
+    pointer-events: none;
 
-  circle {
-    pointer-events: all;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    
+    circle {
+      pointer-events: all;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    g {
+      pointer-events: all;
+    }
+
+    foreignObject {
+      pointer-events: all;
+    }
   }
 }
 
@@ -51,4 +58,3 @@
     }
   }
 }
-

@@ -46,8 +46,8 @@ export class RoadmapComponent implements AfterViewInit {
       title: 'شروع پروژه',
       description: 'تحلیل نیازمندی‌ها',
       steps: [
-        { name: 'جلسه با کارفرما', done: true },
-        { name: 'نوشتن داکیومنت نیازمندی', done: true },
+        { name: 'جلسه با کارفرما', done: false },
+        { name: 'نوشتن داکیومنت نیازمندی', done: false },
         { name: 'تایید نهایی', done: false }
       ]
     },
@@ -115,35 +115,42 @@ export class RoadmapComponent implements AfterViewInit {
     let prevGoalsDone = true;
 
     this.data.forEach(goal => {
-      // مراحل
-      for (let step of goal.steps) {
-        const pt = path.getPointAtLength(currentLength);
-        newPoints.push({
-          id: newPoints.length + 1,
-          label: step.name,
-          x: pt.x,
-          y: pt.y,
-          progress: 0,
-          isStep: true,
-          stepName: step.name,
-          stepDone: step.done,
-          isLocked: !prevGoalsDone
-        });
-        currentLength += stepDistance;
-      }
+      // مراحل درون هر هدف
+      let previousStepDone = prevGoalsDone;
+for (let i = 0; i < goal.steps.length; i++) {
+  const step = goal.steps[i];
+  const pt = path.getPointAtLength(currentLength);
 
-      // هدف
+  newPoints.push({
+    id: newPoints.length + 1,
+    label: step.name,
+    x: pt.x,
+    y: pt.y,
+    progress: 0,
+    isStep: true,
+    stepName: step.name,
+    stepDone: step.done,
+    // فقط مرحله اول باز باشه، یا اگر قبلی انجام شده
+    isLocked: i === 0 ? !prevGoalsDone : !goal.steps[i - 1].done
+  });
+
+  currentLength += stepDistance;
+}
+
+      // هدف اصلی
       const ptGoal = path.getPointAtLength(currentLength);
       const progress = this.getProgress(goal);
       const goalDone = progress === 100;
+
       newPoints.push({
         id: newPoints.length + 1,
-        label: `${goal.title} - ${progress}%`,
+        label: `${goal.title}`,
         x: ptGoal.x,
         y: ptGoal.y,
         progress,
         isLocked: !prevGoalsDone
       });
+
       prevGoalsDone = goalDone;
       currentLength += stepDistance;
     });
@@ -164,42 +171,63 @@ export class RoadmapComponent implements AfterViewInit {
     return done ? '#4caf50' : '#cccccc';
   }
 
+  toggleTooltip(point: Point) {
+    if (this.hoveredPoint?.id === point.id) {
+      this.hoveredPoint = null;
+    } else if (!point.isLocked) {
+      this.hoveredPoint = point;
+    }
+  }
+
   toggleStep(point: Point) {
     if (!point.isStep || point.isLocked) return;
-  
+
     point.stepDone = !point.stepDone;
-  
+
     // پیدا کردن هدف مربوطه
     const goalIndex = this.data.findIndex(g =>
       g.steps.some(s => s.name === point.stepName)
     );
-  
     if (goalIndex === -1) return;
-  
-    // تغییر وضعیت مرحله در داده اصلی
+
     const goal = this.data[goalIndex];
-    const step = goal.steps.find(s => s.name === point.stepName);
-    if (step) step.done = point.stepDone;
-  
+    const stepIndex = goal.steps.findIndex(s => s.name === point.stepName);
+    if (stepIndex === -1) return;
+
+    // بروزرسانی داده اصلی
+    goal.steps[stepIndex].done = point.stepDone;
+
+    // آزاد کردن مرحله بعدی
+    if (point.stepDone && stepIndex + 1 < goal.steps.length) {
+      const nextStepName = goal.steps[stepIndex + 1].name;
+      const nextStepPoint = this.points.find(
+        p => p.isStep && p.stepName === nextStepName
+      );
+      if (nextStepPoint) nextStepPoint.isLocked = false;
+    }
+
     // بروزرسانی درصد پیشرفت هدف
     const progress = this.getProgress(goal);
-  
-    // بروزرسانی توپ هدف در points
     const goalPoint = this.points.find(
-      p => !p.isStep && p.label.includes(goal.title)
+      p => !p.isStep && p.label === goal.title
     );
     if (goalPoint) goalPoint.progress = progress;
-  
-    // اگر هدف کامل شد، بعدی آزاد شود
+
+    // اگر هدف کامل شد، هدف بعدی و مراحلش آزاد شوند
     if (progress === 100 && goalIndex + 1 < this.data.length) {
-      const nextGoalSteps = this.data[goalIndex + 1].steps.map(s => s.name);
+      const nextGoal = this.data[goalIndex + 1];
+      const nextSteps = nextGoal.steps.map(s => s.name);
+
       this.points.forEach(p => {
-        if (nextGoalSteps.includes(p.stepName ?? '') || p.label.includes(this.data[goalIndex + 1].title)) {
+        if (
+          nextSteps.includes(p.stepName ?? '') ||
+          p.label === nextGoal.title
+        ) {
           p.isLocked = false;
         }
       });
     }
-  
+
     this.cd.detectChanges();
   }
   

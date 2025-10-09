@@ -18,8 +18,7 @@
         [attr.fill]="getStepColor(point.stepDone, !!point.isLocked)"
         stroke="#2b2b2b"
         stroke-width="2"
-        (mouseenter)="!point.isLocked && (hoveredPoint = point)"
-        (mouseleave)="hoveredPoint = null"
+        (click)="toggleTooltip(point)"
       ></circle>
 
       <!-- اهداف -->
@@ -31,81 +30,54 @@
         [attr.fill]="getColor(point.progress, !!point.isLocked)"
         stroke="#2b2b2b"
         stroke-width="3"
-        (mouseenter)="!point.isLocked && (hoveredPoint = point)"
-        (mouseleave)="hoveredPoint = null"
+        (click)="toggleTooltip(point)"
       ></circle>
 
       <!-- Tooltip -->
-      <!-- <g *ngIf="hoveredPoint?.id === point.id">
+      <g *ngIf="hoveredPoint?.id === point.id">
         <rect
-          [attr.x]="point.x - 60"
+          [attr.x]="point.x - 70"
           [attr.y]="point.y + 20"
           rx="6"
           ry="6"
-          width="120"
-          height="40"
+          width="140"
+          height="60"
           fill="#2b2b2b"
           stroke="#444"
           stroke-width="1"
         ></rect>
+
         <text
           [attr.x]="point.x"
-          [attr.y]="point.y + 45"
+          [attr.y]="point.y + 40"
           text-anchor="middle"
           fill="#fff"
           font-size="12"
           font-family="sans-serif"
         >
-          {{ point.label }}
+          {{ point.isStep ? point.label : point.label + ' - ' + point.progress + '%' }}
         </text>
-      </g> -->
 
-      <!-- Tooltip -->
-<g *ngIf="hoveredPoint?.id === point.id">
-  <rect
-    [attr.x]="point.x - 70"
-    [attr.y]="point.y + 20"
-    rx="6"
-    ry="6"
-    width="140"
-    height="60"
-    fill="#2b2b2b"
-    stroke="#444"
-    stroke-width="1"
-  ></rect>
-
-  <text
-    [attr.x]="point.x"
-    [attr.y]="point.y + 40"
-    text-anchor="middle"
-    fill="#fff"
-    font-size="12"
-    font-family="sans-serif"
-  >
-    {{ point.label }}
-  </text>
-
-  <!-- فقط برای مراحل -->
-  <foreignObject
-    *ngIf="point.isStep"
-    [attr.x]="point.x - 60"
-    [attr.y]="point.y + 45"
-    width="120"
-    height="30"
-  >
-    <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-checkbox">
-      <label>
-        <input
-          type="checkbox"
-          [checked]="point.stepDone"
-          (change)="toggleStep(point)"
-        />
-        انجام شد
-      </label>
-    </div>
-  </foreignObject>
-</g>
-
+        <foreignObject
+          *ngIf="point.isStep"
+          [attr.x]="point.x - 60"
+          [attr.y]="point.y + 45"
+          width="120"
+          height="30"
+        >
+          <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-checkbox">
+            <label>
+              <input
+                type="checkbox"
+                [checked]="point.stepDone"
+                (click)="$event.stopPropagation()"
+                (change)="toggleStep(point)"
+              />
+              انجام شد
+            </label>
+          </div>
+        </foreignObject>
+      </g>
     </ng-container>
   </svg>
 </div>
