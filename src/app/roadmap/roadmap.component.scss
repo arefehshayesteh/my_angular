@@ -4,6 +4,7 @@
   max-width: 1000px;
   margin: 100px auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 
   .svg-wrapper {
@@ -39,5 +40,67 @@
 }
 .character {
   transition: all 1s ease-in-out;
+}
+.tooltip-card {
+  position: relative;
+  background: #5c6bc0;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+  width: 120px;
+  font-weight: 500;
+}
+
+/* نوک مثلث زیر تولتیپ */
+.tooltip-card .tooltip-arrow {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid currentColor;
+  opacity: 0.9;
+}
+
+/* افکت سایه و حرکت ملایم */
+.tooltip-card {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.tooltip-card:hover {
+  transform: translateY(-4px);
+  opacity: 0.95;
+}
+.my-courses-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  position: relative; /* می‌توان position:absolute هم داد اگر بخواهیم روی SVG شناور باشد */
+  z-index: 10;
+}
+
+.my-courses-btn {
+  background-color: #ff6f00;
+  color: #fff;
+  font-size: 14px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+
+}
+
+.my-courses-btn:hover {
+  background-color: #ff8f00;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
 }
 

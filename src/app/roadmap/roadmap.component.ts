@@ -87,6 +87,22 @@ export class RoadmapComponent implements AfterViewInit {
        
       ],
     },
+    {
+      title: 'هدف ۲',
+      description: 'توضیحات هدف ۲',
+      steps: [
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+      ],
+    },
    
   ];
 
@@ -147,7 +163,6 @@ export class RoadmapComponent implements AfterViewInit {
       goalIndex: this.mainGoalIndex,
     });
 
-    // 🔹 سایر اهداف کوچکتر
     // 🔹 سایر اهداف کوچکتر
 this.roadmap.forEach((goal, gIndex) => {
   if (gIndex === this.mainGoalIndex) return;
@@ -223,6 +238,12 @@ this.roadmap.forEach((goal, gIndex) => {
       pt.type === 'goal' && Math.abs(pt.x - p.x) < EPS && Math.abs(pt.y - p.y) < EPS
     );
   }
+  openMyCourses() {
+    console.log('نمایش دوره‌های من');
+    // یا اگر روت داری:
+    // this.router.navigate(['/my-courses']);
+  }
+  
   
 }
 
