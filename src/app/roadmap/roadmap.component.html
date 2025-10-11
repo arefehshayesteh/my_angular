@@ -9,21 +9,17 @@
         (click)="openTooltip(p.goalIndex, p.stepIndex!, $event)"
         style="cursor: pointer"
       >
-        <circle
-          [attr.cx]="p.x"
-          [attr.cy]="p.y - 5"
-          r="8"
-          [attr.fill]="
-            roadmap[p.goalIndex].steps[p.stepIndex!].done
-              ? '#00cc66'
-              : roadmap[p.goalIndex].steps[p.stepIndex!].locked
-              ? '#999'
-              : '#ccc'
-          "
-          stroke="#333"
-          stroke-width="1"
-        ></circle>
-
+      <circle
+      *ngIf="p.type === 'step'"
+      [attr.cx]="p.x"
+      [attr.cy]="p.y - 5"
+      r="8"
+      [attr.fill]="hasGoalMarkerAt(p) ? '#FFD700' : '#999'"
+      [attr.opacity]="hasGoalMarkerAt(p) ? 1 : 0"
+      stroke="#333"
+      stroke-width="1"
+    />
+    
         <!-- تولتیپ مرحله -->
         <foreignObject
           *ngIf="
@@ -55,14 +51,14 @@
       <g *ngIf="p.type === 'goal' && p.goalIndex === mainGoalIndex">
         <image
           [attr.x]="p.x - 25"
-          [attr.y]="p.y - 35"
+          [attr.y]="p.y - 60"
           width="50"
           height="50"
           href="assets/point 3.svg"
         ></image>
         <foreignObject
           [attr.x]="p.x - 80"
-          [attr.y]="p.y - 100"
+          [attr.y]="p.y - 120"
           width="160"
           height="80"
         >
@@ -74,15 +70,27 @@
       </g>
 
       <!-- سایر اهداف -->
-      <circle
-        *ngIf="p.type === 'goal' && p.goalIndex !== mainGoalIndex"
-        [attr.cx]="p.x"
-        [attr.cy]="p.y - 5"
-        r="12"
-        fill="red"
-        stroke="#550000"
-        stroke-width="2"
-      ></circle>
+        <g *ngIf="p.type === 'goal' && p.goalIndex !== mainGoalIndex">
+        <!-- آیکون نقطه هدف کوچک -->
+          <image
+            [attr.x]="p.x - 20"
+            [attr.y]="p.y - 55" 
+            width="40"
+            height="40"
+            href="assets/point 4.svg"
+          ></image>
+        </g>
+
+              <!-- کاراکتر متحرک -->
+        <image
+        *ngIf="characterPosition"
+        [attr.x]="characterPosition.x - 70"
+        [attr.y]="characterPosition.y - 160"
+        width="100"
+        height="200"
+        href="assets/img5.png"
+        class="character"
+        />
     </ng-container>
   </svg>
 </div>

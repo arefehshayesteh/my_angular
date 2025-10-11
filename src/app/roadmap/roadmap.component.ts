@@ -38,6 +38,7 @@ interface Point {
 export class RoadmapComponent implements AfterViewInit {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
 
+  characterPosition: { x: number; y: number } | null = null;
   points: Point[] = [];
   tooltip: { goalIndex: number; stepIndex: number } | null = null;
   mainGoalIndex: number = 0;
@@ -45,25 +46,25 @@ export class RoadmapComponent implements AfterViewInit {
 
   roadmap: RoadItem[] = [
     {
-      title: 'هدف ۱',
-      description: 'توضیحات هدف ۱',
+      title: ' هدف اصلی',
+      description: 'توضیحات هدف اصلی',
       steps: [
         { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: false },
-        { name: 'مرحله ۳', done: false, locked: false },
-        { name: 'مرحله ۴', done: false, locked: false },
-        { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: false },
-        { name: 'مرحله ۳', done: false, locked: false },
-        { name: 'مرحله ۴', done: false, locked: false },
-        { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: false },
-        { name: 'مرحله ۳', done: false, locked: false },
-        { name: 'مرحله ۴', done: false, locked: false },
-        { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: false },
-        { name: 'مرحله ۳', done: false, locked: false },
-        { name: 'مرحله ۴', done: false, locked: false },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۳', done: false, locked: true },
+        { name: 'مرحله ۴', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۳', done: false, locked: true },
+        { name: 'مرحله ۴', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۳', done: false, locked: true },
+        { name: 'مرحله ۴', done: false, locked: true },
+        { name: 'مرحله ۱', done: false, locked: true },
+        { name: 'مرحله ۲', done: false, locked: true },
+        { name: 'مرحله ۳', done: false, locked: true },
+        { name: 'مرحله ۴', done: false, locked: true },
       ],
     },
     {
@@ -147,22 +148,27 @@ export class RoadmapComponent implements AfterViewInit {
     });
 
     // 🔹 سایر اهداف کوچکتر
-    this.roadmap.forEach((goal, gIndex) => {
-      if (gIndex === this.mainGoalIndex) return;
-      const relStep = Math.min(goal.steps.length, totalMainSteps - 1);
-      const match = newPoints.find(
-        (p) => p.stepIndex === relStep - 1 && p.type === 'step'
-      );
-      if (match) {
-        newPoints.push({
-          id: `goal${gIndex}`,
-          x: match.x,
-          y: match.y,
-          type: 'goal',
-          goalIndex: gIndex,
-        });
-      }
+    // 🔹 سایر اهداف کوچکتر
+this.roadmap.forEach((goal, gIndex) => {
+  if (gIndex === this.mainGoalIndex) return;
+
+  // هدف باید بعد از آخرین مرحله خودش قرار بگیرد
+  const relStep = Math.min(goal.steps.length, totalMainSteps);
+  const match = newPoints.find(
+    (p) => p.stepIndex === relStep && p.type === 'step'
+  );
+
+  if (match) {
+    newPoints.push({
+      id: `goal${gIndex}`,
+      x: match.x,
+      y: match.y,
+      type: 'goal',
+      goalIndex: gIndex,
     });
+  }
+});
+
 
     this.points = newPoints;
     this.updateProgress();
@@ -188,7 +194,19 @@ export class RoadmapComponent implements AfterViewInit {
     }
     this.tooltip = null;
     this.updateProgress();
+    this.moveCharacterToStep(goalIndex, stepIndex);
+
   }
+
+  moveCharacterToStep(goalIndex: number, stepIndex: number) {
+    const point = this.points.find(
+      (p) => p.goalIndex === goalIndex && p.stepIndex === stepIndex
+    );
+    if (point) {
+      this.characterPosition = { x: point.x, y: point.y };
+    }
+  }
+  
 
   updateProgress() {
     const mainGoal = this.roadmap[this.mainGoalIndex];
@@ -199,4 +217,12 @@ export class RoadmapComponent implements AfterViewInit {
   closeTooltip() {
     this.tooltip = null;
   }
+  hasGoalMarkerAt(p: Point): boolean {
+    const EPS = 0.5; // یا عدد کوچکتر/بزرگتر بنا به مقیاس SVGت
+    return this.points.some(pt =>
+      pt.type === 'goal' && Math.abs(pt.x - p.x) < EPS && Math.abs(pt.y - p.y) < EPS
+    );
+  }
+  
 }
+
