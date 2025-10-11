@@ -1,51 +1,62 @@
-<div class="road-container" (click)="closeTooltip()">
+<div class="road-container">
   <div class="svg-wrapper" #svgContainer></div>
 
   <svg *ngIf="points.length" viewBox="0 0 1000 400" class="overlay">
     <ng-container *ngFor="let p of points">
-      <!-- مراحل هدف اصلی -->
-      <g
-        *ngIf="p.type === 'step'"
-        (click)="openTooltip(p.goalIndex, p.stepIndex!, $event)"
-        style="cursor: pointer"
-      >
-      <circle
-      *ngIf="p.type === 'step'"
-      [attr.cx]="p.x"
-      [attr.cy]="p.y - 5"
-      r="8"
-      [attr.fill]="hasGoalMarkerAt(p) ? '#FFD700' : '#999'"
-      [attr.opacity]="hasGoalMarkerAt(p) ? 1 : 0"
-      stroke="#333"
-      stroke-width="1"
-    />
-    
-        <!-- تولتیپ مرحله -->
-         
-        <foreignObject
-          *ngIf="
-            tooltip &&
-            tooltip.goalIndex === p.goalIndex &&
-            tooltip.stepIndex === p.stepIndex
-          "
-          [attr.x]="p.x - 60"
-          [attr.y]="p.y - 130"
-          width="120"
-          height="70"
-        >
-          <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-box">
-            <strong>{{ roadmap[p.goalIndex].steps[p.stepIndex!].name }}</strong
-            ><br />
-            <label>
-              <input
-                type="checkbox"
-                [checked]="roadmap[p.goalIndex].steps[p.stepIndex!].done"
-                (click)="toggleStep(p.goalIndex, p.stepIndex!); $event.stopPropagation()"
-              />
-              انجام شد
-            </label>
-          </div>
-        </foreignObject>
+
+      <!-- مراحل هدف اصلی (کلیک‌شدنی) -->
+      <g *ngIf="p.type === 'step'" (click)="openTooltip(p.goalIndex, p.stepIndex!, $event)" style="cursor:pointer">
+        <circle
+          [attr.cx]="p.x"
+          [attr.cy]="p.y - 5"
+          r="8"
+          [attr.fill]="hasGoalMarkerAt(p) ? '#FFD700' : '#999'"
+          [attr.opacity]="hasGoalMarkerAt(p) ? 0 : 0"
+          stroke="#333"
+          stroke-width="1"
+        ></circle>
+        <ng-container *ngFor="let cloud of clouds">
+          <image
+            [attr.x]="cloud.x"
+            [attr.y]="cloud.y"
+            [attr.width]="300 * cloud.scale"
+            [attr.height]="100 * cloud.scale"
+            href="assets/c.svg"
+            opacity="0.1"
+          />
+        </ng-container>
+
+        <ng-container *ngIf="tooltip && tooltip.goalIndex === p.goalIndex && tooltip.stepIndex === p.stepIndex">
+          <line
+            [attr.x1]="p.x"
+            [attr.y1]="p.y"
+            [attr.x2]="p.x"
+            [attr.y2]="p.y + 150"
+            stroke="black"
+            stroke-width="2"
+            stroke-dasharray="4,4"
+          ></line>
+
+          <foreignObject
+            [attr.x]="p.x - 60"
+            [attr.y]="p.y + 90"
+            width="120"
+            height="70"
+          >
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tooltip-box">
+              <strong>{{ roadmap[p.goalIndex].steps[p.stepIndex!].name }}</strong><br />
+              <label>
+                <input
+                  type="checkbox"
+                  [checked]="roadmap[p.goalIndex].steps[p.stepIndex!].done"
+                  (click)="toggleStep(p.goalIndex, p.stepIndex!); $event.stopPropagation()"
+                />
+                انجام شد
+              </label>
+              <div class="tooltip-arrow"></div>
+            </div>
+          </foreignObject>
+        </ng-container>
       </g>
 
       <!-- هدف اصلی -->
@@ -70,38 +81,80 @@
         </foreignObject>
       </g>
 
-      <!-- سایر اهداف -->
-        <g *ngIf="p.type === 'goal' && p.goalIndex !== mainGoalIndex">
-        <!-- آیکون نقطه هدف کوچک -->
-          <image
-            [attr.x]="p.x - 20"
-            [attr.y]="p.y - 55" 
-            width="40"
-            height="40"
-            href="assets/point 4.svg"
-          ></image>
-        </g>
-
-              <!-- کاراکتر متحرک -->
+       <!-- 🎯 زیرهدف‌ها با تولتیپ ثابت، رنگ، نقطه‌چین و آیکون رندوم -->
+       <g *ngIf="p.type === 'goal' && p.goalIndex !== mainGoalIndex">
         <image
+          [attr.x]="p.x - 20"
+          [attr.y]="p.y - 55"
+          width="40"
+          height="40"
+          [attr.href]="p.icon"
+        ></image>
+
+        <!-- دایره هم‌رنگ -->
+        <circle
+          [attr.cx]="p.x"
+          [attr.cy]="p.y + 1"
+          r="8"
+          [attr.fill]="p.color"
+        ></circle>
+
+        <!-- نقطه‌چین اتصال -->
+        <line
+          [attr.x1]="p.x"
+          [attr.y1]="p.y + 10"
+          [attr.x2]="p.x"
+          [attr.y2]="(p.goalIndex % 2 === 0) ? p.y - 120 : p.y + 70"
+          [attr.stroke]="p.color"
+          stroke-width="2"
+          stroke-dasharray="4,4"
+        ></line>
+
+        
+  <!-- تولتیپ ثابت یکی در میان بالا/پایین -->
+  <foreignObject
+  [attr.x]="p.x - 60"
+  [attr.y]="(p.goalIndex % 2 === 0) ? (p.y - 130) : (p.y + 80)"
+  width="120"
+  height="70"
+>
+<div xmlns="http://www.w3.org/1999/xhtml" class="box">
+  <div class="colored-tooltip"
+  [ngStyle]="{
+    'background-color': p.color,
+    'border-color': p.color,
+    'width': '120',
+    'height':'120',
+    'color': '#fff',
+    
+  }"
+>
+  <strong>{{ roadmap[p.goalIndex].title }}</strong><br />
+  
+  </div>
+</div>
+</foreignObject>
+</g>
+
+      <!-- کاراکتر متحرک -->
+      <image
         *ngIf="characterPosition"
-        [attr.x]="characterPosition.x - 70"
-        [attr.y]="characterPosition.y - 160"
-        width="100"
-        height="200"
+        [attr.x]="characterPosition.x - 93"
+        [attr.y]="characterPosition.y - 270"
+        width="180"
+        height="350"
         href="assets/img5.png"
         class="character"
-        />
+      />
+
     </ng-container>
-     
   </svg>
+  
+
   <div class="my-courses-container">
     <button class="my-courses-btn" (click)="openMyCourses()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
-        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-      </svg>
       دیدن دوره‌های من
     </button>
   </div>
+  
 </div>

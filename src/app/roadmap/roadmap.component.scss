@@ -1,7 +1,7 @@
 .road-container {
   position: relative;
   width: 95%;
-  max-width: 1000px;
+  max-width: 750px;
   margin: 100px auto;
   display: flex;
   flex-direction: column;
@@ -25,8 +25,8 @@
 
   .tooltip-box {
     background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    // border: 1px solid #ccc;
+    // border-radius: 8px;
     padding: 6px;
     font-size: 12px;
     text-align: center;
@@ -48,25 +48,25 @@
   font-size: 12px;
   text-align: center;
   padding: 6px 8px;
-  border-radius: 8px;
+  // border-radius: 8px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
   width: 120px;
   font-weight: 500;
 }
 
 /* نوک مثلث زیر تولتیپ */
-.tooltip-card .tooltip-arrow {
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 8px solid currentColor;
-  opacity: 0.9;
-}
+// .tooltip-card .tooltip-arrow {
+//   position: absolute;
+//   bottom: -8px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   width: 0;
+//   height: 0;
+//   border-left: 8px solid transparent;
+//   border-right: 8px solid transparent;
+//   border-top: 8px solid currentColor;
+//   opacity: 0.9;
+// }
 
 /* افکت سایه و حرکت ملایم */
 .tooltip-card {
@@ -103,4 +103,88 @@
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
   transform: translateY(-2px);
 }
+.tooltip-box {
+  position: relative;
+  background: #fff;
+  // border: 1px solid #ccc;
+  // border-radius: 8px;
+  padding: 6px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.tooltip-box {
+  background: #fff;
+  // border: 1px solid #ccc;
+//  border-radius: 8px;
+  padding: 6px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease-in-out;
+}
 
+.tooltippp{
+  position: relative;
+  background: #fff;
+  // border: 1px solid #ccc;
+  // border-radius: 8px;
+  padding: 6px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* فلش پایین کارت */
+// .tooltip-box .tooltip-arrow {
+//   position: absolute;
+//   bottom: -8px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   width: 0;
+//   height: 0;
+//   border-left: 8px solid transparent;
+//   border-right: 8px solid transparent;
+//   border-top: 8px solid #fff;
+// }
+
+/* افکت سایه و حرکت ملایم */
+.tooltip-box {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+}
+
+.tooltip-box:hover {
+  transform: translateY(-4px);
+  opacity: 0.95;
+}
+
+// .colored-tooltip {
+//   font-weight: 500;
+//   // color: #fff !important;
+//   // border: 2px solid currentColor;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+// }
+
+// .colored-tooltip input[type='checkbox'] {
+//   accent-color: currentColor;
+//   transform: scale(1.1);
+//   margin-top: 4px;
+// }
+line {
+  transition: stroke 0.3s ease;
+}
+.box {
+  background: #fff;
+  // border: 10px solid ;
+  border-radius: 20px;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.character {
+  opacity: 1;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+
+}
