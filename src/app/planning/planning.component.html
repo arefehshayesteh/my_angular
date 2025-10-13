@@ -1,0 +1,66 @@
+<div class="planning-container" (click)="closeAllMenus()">
+    <div class="tabs">
+      @for (tab of tabs; track tab) {
+        <button [class.active]="tab === activeTab" (click)="setActive(tab)">
+          {{ tab }}
+        </button>
+      }
+    </div>
+  
+    <div class="date-section">
+      <span class="arrow" (click)="handlePrevious()">‹</span>
+      <div class="date-content">
+        <h2>{{ date }}</h2>
+        <p>{{ description }}</p>
+      </div>
+      <span class="arrow" (click)="handleNext()">›</span>
+    </div>
+  
+    <div class="goals">
+      @for (goal of goals; let i = $index; track goal.title) {
+        <div class="goal-card" [style.border-right-color]="goal.color">
+          <div class="goal-header">
+            <h3>{{ goal.title }}</h3>
+            <div class="menu-wrapper">
+              <button class="menu-btn" (click)="$event.stopPropagation(); toggleMenu(i)">
+                ⋮
+              </button>
+              
+              @if (openedMenuIndex === i) {
+                <div class="menu-dropdown">
+                  <button class="menu-item" (click)="editGoal(goal)">
+                    <span class="menu-icon">✏️</span>
+                    ویرایش رکورد
+                  </button>
+                  <button class="menu-item" (click)="selectPriority(goal)">
+                    <span class="menu-icon">🎯</span>
+                    انتخاب اولویت
+                  </button>
+                  <button class="menu-item" (click)="selectColor(goal)">
+                    <span class="menu-icon">🎨</span>
+                    انتخاب رنگ رکورد
+                  </button>
+                  <button class="menu-item" (click)="showReport(goal)">
+                    <span class="menu-icon">📊</span>
+                    لیست گزارش
+                  </button>
+                  <div class="menu-divider"></div>
+                  <button class="menu-item delete" (click)="deleteGoal(goal)">
+                    <span class="menu-icon">🗑️</span>
+                    حذف کردن
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+  
+          <div class="progress">
+            <div class="bar">
+              <div class="fill" [style.width.%]="goal.progress" [style.background]="goal.color"></div>
+            </div>
+            <span class="percent">{{ goal.progress }}%</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
