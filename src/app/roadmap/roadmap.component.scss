@@ -1,190 +1,29 @@
-.road-container {
+:host {
+  display: block;
   position: relative;
-  width: 95%;
-  max-width: 750px;
-  margin: 100px auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  .svg-wrapper {
-    width: 100%;
-    svg {
-      width: 100%;
-      height: auto;
-    }
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-  }
-
-  .tooltip-box {
-    background: #fff;
-    // border: 1px solid #ccc;
-    // border-radius: 8px;
-    padding: 6px;
-    font-size: 12px;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  }
-
-  input[type='checkbox'] {
-    transform: scale(1.1);
-    margin-top: 4px;
-  }
-}
-.character {
-  transition: all 1s ease-in-out;
-}
-.tooltip-card {
-  position: relative;
-  background: #5c6bc0;
-  color: #fff;
-  font-size: 12px;
-  text-align: center;
-  padding: 6px 8px;
-  // border-radius: 8px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-  width: 120px;
-  font-weight: 500;
-}
-
-/* نوک مثلث زیر تولتیپ */
-// .tooltip-card .tooltip-arrow {
-//   position: absolute;
-//   bottom: -8px;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   width: 0;
-//   height: 0;
-//   border-left: 8px solid transparent;
-//   border-right: 8px solid transparent;
-//   border-top: 8px solid currentColor;
-//   opacity: 0.9;
-// }
-
-/* افکت سایه و حرکت ملایم */
-.tooltip-card {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-.tooltip-card:hover {
-  transform: translateY(-4px);
-  opacity: 0.95;
-}
-.my-courses-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  position: relative; /* می‌توان position:absolute هم داد اگر بخواهیم روی SVG شناور باشد */
-  z-index: 10;
+  height: 100vh;
 }
 
-.my-courses-btn {
-  background-color: #ff6f00;
-  color: #fff;
-  font-size: 14px;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-
+.roadmap-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 1200px;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-.my-courses-btn:hover {
-  background-color: #ff8f00;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-  transform: translateY(-2px);
-}
-.tooltip-box {
-  position: relative;
-  background: #fff;
-  // border: 1px solid #ccc;
-  // border-radius: 8px;
-  padding: 6px;
-  font-size: 12px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-.tooltip-box {
-  background: #fff;
-  // border: 1px solid #ccc;
-//  border-radius: 8px;
-  padding: 6px;
-  font-size: 12px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease-in-out;
-}
-
-.tooltippp{
-  position: relative;
-  background: #fff;
-  // border: 1px solid #ccc;
-  // border-radius: 8px;
-  padding: 6px;
-  font-size: 12px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* فلش پایین کارت */
-// .tooltip-box .tooltip-arrow {
-//   position: absolute;
-//   bottom: -8px;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   width: 0;
-//   height: 0;
-//   border-left: 8px solid transparent;
-//   border-right: 8px solid transparent;
-//   border-top: 8px solid #fff;
-// }
-
-/* افکت سایه و حرکت ملایم */
-.tooltip-box {
-  transition: transform 0.3s ease, opacity 0.3s ease;
-
-}
-
-.tooltip-box:hover {
-  transform: translateY(-4px);
-  opacity: 0.95;
-}
-
-// .colored-tooltip {
-//   font-weight: 500;
-//   // color: #fff !important;
-//   // border: 2px solid currentColor;
-//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-// }
-
-// .colored-tooltip input[type='checkbox'] {
-//   accent-color: currentColor;
-//   transform: scale(1.1);
-//   margin-top: 4px;
-// }
-line {
-  transition: stroke 0.3s ease;
-}
-.box {
-  background: #fff;
-  // border: 10px solid ;
-  border-radius: 20px;
-  font-size: 12px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-.character {
-  opacity: 1;
-  transition: all 1s ease-in-out;
-  pointer-events: none;
-
+.svg-container {
+  width: 100%;
+  padding: 90px;
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
 }

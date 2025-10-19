@@ -7,29 +7,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface Step {
-  name: string;
-  done: boolean;
-  locked: boolean;
-}
-
-interface RoadItem {
-  title: string;
-  description: string;
-  steps: Step[];
-}
-
-interface Point {
-  id: string;
-  x: number;
-  y: number;
-  type: 'goal' | 'step';
-  goalIndex: number;
-  stepIndex?: number;
-  color?: string;
-  icon?: string;
-}
-
 @Component({
   selector: 'app-roadmap',
   standalone: true,
@@ -40,262 +17,152 @@ interface Point {
 export class RoadmapComponent implements AfterViewInit {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;
 
-  characterPosition: { x: number; y: number } | null = null;
-  points: Point[] = [];
-  tooltip: { goalIndex: number; stepIndex: number } | null = null;
-  mainGoalIndex: number = 0;
-  progressPercent: number = 0;
-
-  // 🔸 آیکون‌ها و رنگ‌های تصادفی زیرهدف‌ها
-  goalVariants = [
-    { icon: 'assets/point 1.svg', color: '#6a11cb' },
-    { icon: 'assets/point 2.svg', color: '#ff9100' },
-    { icon: 'assets/point 3.svg', color: '#ff4c60' },
-    { icon: 'assets/point 4.svg', color: '#ffd500' },
-  ];
-
-  roadmap: RoadItem[] = [
-    {
-      title: ' هدف اصلی',
-      description: 'توضیحات هدف اصلی',
-      steps: [
-        { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-      ],
-    },
-    {
-      title: ' هدف اصلی',
-      description: 'توضیحات هدف اصلی',
-      steps: [
-        { name: 'مرحله ۱', done: false, locked: false },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        
-      ],
-    },
-    {
-      title: 'هدف ۲',
-      description: 'توضیحات هدف ۲',
-      steps: [
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-      ],
-    },
-    {
-      title: 'هدف ۳',
-      description: 'توضیحات هدف ۳',
-      steps: [
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۴', done: false, locked: true },
-      ],
-    },
-    {
-      title: 'هدف ۴',
-      description: 'توضیحات هدف ۴',
-      steps: [
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-        { name: 'مرحله ۱', done: false, locked: true },
-        { name: 'مرحله ۲', done: false, locked: true },
-        { name: 'مرحله ۳', done: false, locked: true },
-      ],
-    },
-  ];
-
   constructor(private cdr: ChangeDetectorRef) {}
 
   async ngAfterViewInit() {
     await this.loadSvgAndGeneratePoints();
     window.addEventListener('resize', () => this.loadSvgAndGeneratePoints());
-    this.generateRandomClouds();
-
-  }
-  generateRandomClouds() {
-    const svgWidth = 1000; // یا viewBox.width
-    const svgHeight = 400; // یا viewBox.height
-    this.clouds = [];
-    for (let i = 0; i < this.numClouds; i++) {
-      this.clouds.push({
-        x: Math.random() * (svgWidth - 100), // 100 پهنای تقریبی ابر
-        y: Math.random() * (svgHeight - 60), // 60 ارتفاع تقریبی ابر
-        scale: 0.5 + Math.random() * 0.8 // اندازه تصادفی بین 0.5 تا 1.3
-      });
-    }
   }
 
   async loadSvgAndGeneratePoints() {
     const container = this.svgContainer.nativeElement;
-    const svgResponse = await fetch('assets/road.svg');
+    
+    // پاک‌سازی محتوا
+    container.innerHTML = '';
+    
+    const svgResponse = await fetch('assets/street (1).svg');
     const svgText = await svgResponse.text();
     container.innerHTML = svgText;
-
-    const svgEl = container.querySelector('svg');
-    const path = svgEl.querySelector('#roadPath');
-    if (!path) return;
-
-    const pathLength = path.getTotalLength();
-
-    this.mainGoalIndex = this.roadmap.reduce(
-      (maxIdx, g, i, arr) =>
-        g.steps.length > arr[maxIdx].steps.length ? i : maxIdx,
-      0
-    );
-
-    const mainGoal = this.roadmap[this.mainGoalIndex];
-    const totalMainSteps = mainGoal.steps.length;
-    const stepDistance = pathLength / (totalMainSteps + 2);
-    const newPoints: Point[] = [];
-
-    let currentLength = stepDistance;
-    for (let i = 0; i < totalMainSteps; i++) {
-      const pt = path.getPointAtLength(currentLength);
-      newPoints.push({
-        id: `main-step-${i}`,
-        x: pt.x,
-        y: pt.y,
-        type: 'step',
-        goalIndex: this.mainGoalIndex,
-        stepIndex: i,
-      });
-      currentLength += stepDistance;
-    }
-
-    const endPt = path.getPointAtLength(currentLength);
-    newPoints.push({
-      id: `main-goal`,
-      x: endPt.x,
-      y: endPt.y,
-      type: 'goal',
-      goalIndex: this.mainGoalIndex,
-    });
-
-    // 🎨 سایر اهداف با رنگ و آیکون تصادفی
-    this.roadmap.forEach((goal, gIndex) => {
-      if (gIndex === this.mainGoalIndex) return;
-
-      const relStep = Math.min(goal.steps.length, totalMainSteps);
-      const match = newPoints.find(
-        (p) => p.stepIndex === relStep && p.type === 'step'
-      );
-
-      if (match) {
-        const variant =
-          this.goalVariants[Math.floor(Math.random() * this.goalVariants.length)];
-
-        newPoints.push({
-          id: `goal${gIndex}`,
-          x: match.x,
-          y: match.y,
-          type: 'goal',
-          goalIndex: gIndex,
-          color: variant.color,
-          icon: variant.icon,
-        });
-      }
-    });
-
-    this.points = newPoints;
-
-// اول تغییرات رو به Angular اطلاع می‌دیم
-this.cdr.detectChanges();
-
-// 👇 بعد از اینکه view آپدیت شد، کاراکتر رو روی نقطه اول می‌ذاریم
-const firstStep = this.points.find(
-  (p) => p.goalIndex === this.mainGoalIndex && p.type === 'step' && p.stepIndex === 0
-);
-if (firstStep) {
-  this.characterPosition = { x: firstStep.x, y: firstStep.y };
-}
-
-// در پایان درصد پیشرفت رو آپدیت می‌کنیم
-this.updateProgress();
-
-  }
-
   
-  openTooltip(goalIndex: number, stepIndex: number, event: MouseEvent) {
-    event.stopPropagation();
-    const step = this.roadmap[goalIndex].steps[stepIndex];
-    if (!step.locked) this.tooltip = { goalIndex, stepIndex };
-  }
-
-  toggleStep(goalIndex: number, stepIndex: number) {
-    const goal = this.roadmap[goalIndex];
-    const step = goal.steps[stepIndex];
-    if (step.locked) return;
-
-    step.done = !step.done;
-    if (step.done && stepIndex + 1 < goal.steps.length) {
-      goal.steps[stepIndex + 1].locked = false;
+    const svg = container.querySelector('svg') as SVGSVGElement | null;
+    if (!svg) {
+      console.error('SVG not found!');
+      return;
     }
-    this.tooltip = null;
-    this.updateProgress();
-    this.moveCharacterToStep(goalIndex, stepIndex);
+  
+    // حذف تمام attributeهای موقعیت‌دهی از SVG اصلی
+    svg.removeAttribute('x');
+    svg.removeAttribute('y');
+    svg.removeAttribute('transform');
+    
+    // تنظیم استایل برای居中 سازی
+    svg.style.display = 'block';
+    svg.style.margin = '0 auto';
+    svg.style.maxWidth = '100%';
+    svg.style.height = 'auto';
+  
+    console.log('SVG loaded and centered');
+    
+    // بقیه کدهای شما...
+   
+
+    // حذف قبلی‌ها
+    svg.querySelectorAll('.point-marker, .man-icon').forEach((el: Element) => el.remove());
+
+    let firstPointCoords: { x: number; y: number } | null = null;
+
+    // حلقه‌ی نقاط 1 تا 25
+    for (let i = 1; i <= 25; i++) {
+      const target = svg.querySelector(`[data-name="${i}"]`) as SVGPathElement | null;
+      if (!target) continue;
+
+      const pathLength = target.getTotalLength();
+      const midpoint = target.getPointAtLength(pathLength / 2);
+
+      // محاسبه‌ی transform والدها
+      let totalX = midpoint.x;
+      let totalY = midpoint.y;
+      let current: Element | null = target;
+
+      while (current && current !== svg) {
+        const transform = current.getAttribute('transform');
+        if (transform) {
+          const match = transform.match(/translate\((-?\d+(?:\.\d+)?)[ ,]+(-?\d+(?:\.\d+)?)\)/);
+          if (match) {
+            totalX += parseFloat(match[1]) || 0;
+            totalY += parseFloat(match[2]) || 0;
+          }
+        }
+        current = current.parentElement;
+      }
+
+      if (i === 1) {
+        firstPointCoords = { x: totalX, y: totalY };
+      }
+
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', totalX.toString());
+      circle.setAttribute('cy', totalY.toString());
+      circle.setAttribute('r', '2');
+      circle.setAttribute('fill', 'red');
+      circle.classList.add('point-marker');
+      svg.appendChild(circle);
+    }
+
+    // نقطه خاص تغییر مکان داده شود
+    const circleToMove = svg.querySelector(
+      'circle[cx="480.36301586914067"][cy="27.838805572509763"]'
+    ) as SVGCircleElement | null;
+    if (circleToMove) {
+      circleToMove.setAttribute('cx', '355.36301586914067');
+      circleToMove.setAttribute('cy', '58.838805572509763');
+    }
+
+    // 📌 درج man2.svg به صورت inline در نقطه اول
+   // 📌 درج man2.svg روی مسیر Path_3580
+const targetPath = svg.querySelector('#Path_3580') as SVGPathElement | null;
+if (targetPath) {
+  const pathLength = targetPath.getTotalLength();
+  const midpoint = targetPath.getPointAtLength(pathLength / 2);
+
+  // محاسبه transform مسیر
+  let totalX = midpoint.x;
+  let totalY = midpoint.y;
+  let current: Element | null = targetPath;
+
+  while (current && current !== svg) {
+    const transform = current.getAttribute('transform');
+    if (transform) {
+      const match = transform.match(/translate\((-?\d+(?:\.\d+)?)[ ,]+(-?\d+(?:\.\d+)?)\)/);
+      if (match) {
+        totalX += parseFloat(match[1]) || 0;
+        totalY += parseFloat(match[2]) || 0;
+      }
+    }
+    current = current.parentElement;
   }
 
-  moveCharacterToStep(goalIndex: number, stepIndex: number) {
-    const point = this.points.find(
-      (p) => p.goalIndex === goalIndex && p.stepIndex === stepIndex
-    );
-    if (point) this.characterPosition = { x: point.x, y: point.y };
-  }
+  try {
+    const manResponse = await fetch('assets/man2.svg');
+    const manSvgText = await manResponse.text();
 
-  updateProgress() {
-    const mainGoal = this.roadmap[this.mainGoalIndex];
-    const done = mainGoal.steps.filter((s) => s.done).length;
-    this.progressPercent = Math.round((done / mainGoal.steps.length) * 100);
-  }
+    const parser = new DOMParser();
+    const manDoc = parser.parseFromString(manSvgText, 'image/svg+xml');
+    const manSvg = manDoc.querySelector('svg');
+    if (manSvg) {
+      manSvg.setAttribute('width', '800');   // عرض دلخواه
+      manSvg.setAttribute('height', '600');  // ارتفاع دلخواه
+      
+    }
+    if (manSvg) {
+      // مرکز مسیر
+      manSvg.setAttribute('x', (totalX - 12).toString());
+      manSvg.setAttribute('y', (totalY - 80).toString());
+      manSvg.setAttribute('width', '50');
+      manSvg.setAttribute('height', '80');
+      manSvg.classList.add('man-icon');
+      manSvg.width
 
-  closeTooltip() {
-    this.tooltip = null;
+      const importedNode = svg.ownerDocument.importNode(manSvg, true);
+      svg.appendChild(importedNode);
+    }
+    
+  } catch (err) {
+    console.error('خطا در لود man2.svg:', err);
   }
-
-  hasGoalMarkerAt(p: Point): boolean {
-    const EPS = 0.5;
-    return this.points.some(
-      (pt) =>
-        pt.type === 'goal' &&
-        Math.abs(pt.x - p.x) < EPS &&
-        Math.abs(pt.y - p.y) < EPS
-    );
-  }
-
-  openMyCourses() {
-    console.log('نمایش دوره‌های من');
-  }
-  clouds: { x: number; y: number; scale: number }[] = [];
-numClouds = 5; // تعداد ابرها
-
 }
+
+this.cdr.detectChanges();
+}
+  }
 
