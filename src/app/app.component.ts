@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RoadmapComponent } from './roadmap/roadmap.component';
-import { PlanningComponent } from "./planning/planning.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RoadmapComponent, PlanningComponent],
+  imports: [RoadmapComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

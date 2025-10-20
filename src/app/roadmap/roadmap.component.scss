@@ -27,3 +27,18 @@
     margin: 0 auto;
   }
 }
+.svg-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.point-marker {
+  pointer-events: none;
+}
+
+.goal-tooltip {
+  pointer-events: none;
+  font-family: sans-serif;
+  font-weight: bold;
+  fill: #333;
+}
