@@ -13,6 +13,7 @@ export interface Goal {
   color: string;
   progress: number;
   subgoal: SubGoal[];
+  deadline: number;
 }
 
 @Injectable({
@@ -25,29 +26,87 @@ export class DataService {
       description: 'مطالعه دروس تخصصی کنکور',
       color: '#FF7E7E',
       progress: 60,
+      deadline : 365,
       subgoal: [
         { name: 'هدف ۱', done: true, locked: false },
         { name: 'هدف ۲', done: false, locked: true },
         { name: 'هدف ۳', done: false, locked: true },
-        { name: 'هدف ۴', done: false, locked: true },
-        { name: 'هدف ۵', done: false, locked: false },
-        { name: 'هدف ۴', done: false, locked: true },
-        { name: 'هدف ۵', done: false, locked: false }
+        { name: 'هدف 4', done: true, locked: false },
+        { name: 'هدف 5', done: false, locked: true },
+        { name: 'هدف 6', done: false, locked: true }
       ],
-      
-      {
-        "title": "هدف ۲",
-        "description": "تمرین تست‌زنی و زمان‌بندی",
-        "color": "#00AEEF",
-        "progress": 20,
-        "step": [
-          { "name": "مرحله ۱", "done": false, "locked": false },
-          { "name": "مرحله ۲", "done": false, "locked": false },
-          { "name": "مرحله ۳", "done": false, "locked": true },
-          { "name": "مرحله ۴", "done": false, "locked": true },
-          { "name": "مرحله ۵", "done": false, "locked": true }
-        ],
-
+    },
+    {
+      title: 'هدف 1',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 10,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
+    },
+    {
+      title: 'هدف2',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 30,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
+    },
+    {
+      title: 'هدف 3',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 40,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
+    },
+    {
+      title: 'هدف 4',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 20,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
+    },
+    {
+      title: 'هدف5',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 100,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
+    },
+    {
+      title: 'هدف 6',
+      description: 'مطالعه دروس تخصصی کنکور',
+      color: '#FF7E7E',
+      progress: 60,
+      deadline : 730,
+      subgoal: [
+        { name: 'هدف ۱', done: true, locked: false },
+        { name: 'هدف ۲', done: false, locked: true },
+        
+      ],
     },
   ];
 

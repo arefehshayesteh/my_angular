@@ -9,7 +9,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  // transform: translate(-50%, -50%);
   width: 80%;
   max-width: 1200px;
   background-color: white;
@@ -42,3 +42,58 @@
   font-weight: bold;
   fill: #333;
 }
+.roadmap-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+}
+
+.button-container {
+  text-align: center;
+}
+
+.my-courses-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ff7e7e;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.my-courses-btn:hover {
+  background-color: #ff5a5a;
+  // transform: translateY(-2px);
+}
+.svg-wrapper svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.roadmap-container {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  // gap: 10px; /* فاصله طبیعی و کم بین اجزا */
+}
+

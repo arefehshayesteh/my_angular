@@ -10,7 +10,7 @@ import { DataService, Goal } from '../data.service';
   styleUrls: ['./planning.component.scss']
 })
 export class PlanningComponent implements OnInit {
-  tabs = ['روزانه', 'هفتگی', 'ماهانه'];
+  tabs = ['روزانه', 'ماهانه', 'سالانه'];
   activeTab = 'روزانه';
   
   // تاریخ جاری
@@ -27,13 +27,14 @@ export class PlanningComponent implements OnInit {
     this.updateDateDisplay();
     this.dataService.getGoals().subscribe({
       next: (data) => {
-        this.goals = data;
+        this.goals = this.filterGoalsByTab(data, this.activeTab);
       },
       error: (error) => {
         console.error('خطا در دریافت داده:', error);
       }
     });
   }
+  
 
   // تبدیل تاریخ به فارسی
   private toPersianDate(date: Date): string {
@@ -134,10 +135,10 @@ export class PlanningComponent implements OnInit {
       case 'روزانه':
         this.previousDay();
         break;
-      case 'هفتگی':
+      case 'ماهانه':
         this.previousWeek();
         break;
-      case 'ماهانه':
+      case 'سالانه':
         this.previousMonth();
         break;
     }
@@ -148,10 +149,10 @@ export class PlanningComponent implements OnInit {
       case 'روزانه':
         this.nextDay();
         break;
-      case 'هفتگی':
+      case 'ماهانه':
         this.nextWeek();
         break;
-      case 'ماهانه':
+      case 'سالانه':
         this.nextMonth();
         break;
     }
@@ -159,10 +160,14 @@ export class PlanningComponent implements OnInit {
 
   setActive(tab: string) {
     this.activeTab = tab;
-    // وقتی تب تغییر کرد، تاریخ را به امروز بازنشانی کن
     this.currentDate = new Date();
     this.updateDateDisplay();
+  
+    this.dataService.getGoals().subscribe((data) => {
+      this.goals = this.filterGoalsByTab(data, tab);
+    });
   }
+  
 
   toggleMenu(index: number) {
     this.openedMenuIndex = this.openedMenuIndex === index ? null : index;
@@ -182,25 +187,25 @@ export class PlanningComponent implements OnInit {
     this.closeAllMenus();
   }
 
-  selectColor(goal: Goal) {
-    console.log('انتخاب رنگ برای:', goal);
-    goal.color = this.getRandomColor();
-    this.dataService.updateGoal(goal);
-    this.closeAllMenus();
-  }
+  // selectColor(goal: Goal) {
+  //   console.log('انتخاب رنگ برای:', goal);
+  //   goal.color = this.getRandomColor();
+  //   this.dataService.updateGoal(goal);
+  //   this.closeAllMenus();
+  // }
 
   showReport(goal: Goal) {
     console.log('نمایش گزارش برای:', goal);
     this.closeAllMenus();
   }
 
-  deleteGoal(goal: Goal) {
-    if (confirm(`آیا از حذف "${goal.title}" مطمئن هستید؟`)) {
-      this.dataService.deleteGoal(goal);
-      this.goals = this.goals.filter(g => g !== goal);
-      this.closeAllMenus();
-    }
-  }
+  // deleteGoal(goal: Goal) {
+  //   if (confirm(`آیا از حذف "${goal.title}" مطمئن هستید؟`)) {
+  //     this.dataService.deleteGoal(goal);
+  //     this.goals = this.goals.filter(g => g !== goal);
+  //     this.closeAllMenus();
+  //   }
+  // }
 
   private getRandomColor(): string {
     const colors = [
@@ -210,4 +215,17 @@ export class PlanningComponent implements OnInit {
     ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
+  private filterGoalsByTab(goals: Goal[], tab: string): Goal[] {
+  switch (tab) {
+    case 'روزانه':
+      return goals.filter(g => g.deadline < 30); // زیر ۳۰ روز
+    case 'ماهانه':
+      return goals.filter(g => g.deadline >= 30 && g.deadline < 365); // بین ۳۰ تا کمتر از ۳۶۵
+    case 'سالانه':
+      return goals.filter(g => g.deadline >= 365); // ۳۶۵ یا بیشتر
+    default:
+      return goals;
+  }
+}
+
 }

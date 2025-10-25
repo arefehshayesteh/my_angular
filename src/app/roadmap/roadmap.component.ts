@@ -50,7 +50,7 @@ export class RoadmapComponent implements AfterViewInit {
       return;
     }
 
-    // تنظیم استایل کلی SVG
+    
     svg.removeAttribute('x');
     svg.removeAttribute('y');
     svg.removeAttribute('transform');
@@ -64,7 +64,7 @@ export class RoadmapComponent implements AfterViewInit {
 
     const points: { x: number; y: number }[] = [];
 
-    // 🔴 رسم نقاط قرمز
+    //   نقاط قرمز
     for (let i = 1; i <= this.totalPoints; i++) {
       const target = svg.querySelector(`[data-name="${i}"]`) as SVGPathElement | null;
       if (!target) continue;
@@ -100,13 +100,13 @@ export class RoadmapComponent implements AfterViewInit {
       svg.appendChild(circle);
     }
 
-    // 🎯 هدف اصلی
+    //  هدف اصلی
     const mainGoal = this.goals.find((g) => g.title === 'هدف اصلی');
     if (!mainGoal || !(mainGoal as any).subgoal) return;
     const subgoals = (mainGoal as any).subgoal;
     const subCount = subgoals.length;
 
-    // 📍 قرار دادن ساب‌هدف‌ها روی نقشه
+    //  قرار دادن ساب‌هدف‌ها روی نقشه
     for (let i = 0; i < subCount; i++) {
       const ratio = (i + 1) / (subCount + 1);
       let pointIndex = Math.floor(ratio * this.totalPoints);
@@ -121,7 +121,7 @@ export class RoadmapComponent implements AfterViewInit {
       await this.addGoalIcon(svg, pos.x, pos.y, randomIcon, subgoals[i].name);
     }
 
-    // 🎯 هدف اصلی روی آخرین نقطه + تولتیپ ثابت
+    //  هدف اصلی روی آخرین نقطه + تولتیپ ثابت
     const lastPos = points.length > 0 ? points[points.length - 1] : null;
     if (lastPos) {
       try {
@@ -141,7 +141,6 @@ export class RoadmapComponent implements AfterViewInit {
           const importedNode = svg.ownerDocument.importNode(iconSvg, true);
           svg.appendChild(importedNode);
 
-          // 🏷 تولتیپ ثابت بالای هدف اصلی
           const tooltipGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
 
           const tooltipBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -172,7 +171,7 @@ export class RoadmapComponent implements AfterViewInit {
       }
     }
 
-    // 👨 man2.svg و نقطه خاص
+    
     const targetPath = svg.querySelector('#Path_3580') as SVGPathElement | null;
     if (targetPath) {
       const pathLength = targetPath.getTotalLength();
@@ -204,9 +203,9 @@ export class RoadmapComponent implements AfterViewInit {
 
         if (manSvg) {
           manSvg.setAttribute('x', (totalX - 12).toString());
-          manSvg.setAttribute('y', (totalY - 80).toString());
+          manSvg.setAttribute('y', (totalY - 90 ).toString());
           manSvg.setAttribute('width', '50');
-          manSvg.setAttribute('height', '80');
+          manSvg.setAttribute('height', '90');
           manSvg.classList.add('man-icon');
           const importedNode = svg.ownerDocument.importNode(manSvg, true);
           svg.appendChild(importedNode);
@@ -245,15 +244,6 @@ export class RoadmapComponent implements AfterViewInit {
         const importedNode = svg.ownerDocument.importNode(iconSvg, true);
         svg.appendChild(importedNode);
 
-        // متن کنار آیکون
-        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', (x + 10).toString());
-        text.setAttribute('y', (y + 5).toString());
-        text.setAttribute('font-size', '10');
-        text.setAttribute('fill', '#333');
-        text.textContent = title;
-        text.classList.add('goal-text');
-        svg.appendChild(text);
       }
     } catch (err) {
       console.error('❌ خطا در لود آیکون هدف:', err);
