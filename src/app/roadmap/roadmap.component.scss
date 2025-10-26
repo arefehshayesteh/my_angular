@@ -2,34 +2,184 @@
   display: block;
   position: relative;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
-.roadmap-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  // transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 1200px;
-  background-color: white;
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 800px;
+  position: relative;
+  margin: 0 auto;
+  // box-sizing: border-box;
+  
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    width: 95%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    width: 100%;
+  }
+}
+
+// .roadmap-wrapper {
+//   position: relative;
+//   width: 100%;
+//   max-width: 1200px;
+//   background-color: white;
+//   padding: 20px;
+//   box-shadow: 0 0 10px rgba(0,0,0,0);
+//   box-sizing: border-box;
+//   margin: 0 auto;
+  
+
+ 
+// }
+
+.roadmap-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+
+  .controls {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 10px;
+    }
+  }
 }
 
 .svg-container {
   width: 100%;
-  padding: 90px;
+  // padding: 90px;
+  box-sizing: border-box;
+
+  // @media (max-width: 1200px) {
+  //   padding: 70px;
+  // }
+
+  // @media (max-width: 992px) {
+  //   padding: 50px;
+  // }
+
+  // @media (max-width: 768px) {
+  //   padding: 30px;
+  // }
+
+  @media (max-width: 576px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
+
   svg {
     display: block;
     width: 100%;
     height: auto;
     margin: 0 auto;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 768px) {
+      transform: scale(0.9);
+    }
+
+    @media (max-width: 768px) {
+      transform: scale(0.85);
+    }
   }
 }
+
 .svg-wrapper {
   width: 100%;
   overflow-x: auto;
+  max-width: 768px;
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.button-container {
+  text-align: center;
+  width: 100%;
+  margin: 15px 0;
+
+  @media (max-width: 768px) {
+    margin: 10px 0;
+  }
+}
+
+.my-courses-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ff7e7e;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 200px;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 13px;
+    min-width: 180px;
+  }
+
+  @media (max-width: 700px) {
+    // padding: 8px 16px;
+    font-size: 12px;
+    min-width: 160px;
+    // gap: 6px;
+  }
+
+  &:hover {
+    background-color: #ff5a5a;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    
+    @media (max-width: 480px) {
+      width: 14px;
+      height: 14px;
+    }
+  }
 }
 
 .point-marker {
@@ -42,21 +192,174 @@
   font-weight: bold;
   fill: #333;
 }
+
+// استایل برای حالت‌های خاص
+@media (max-width: 360px) {
+  .svg-container {
+    // padding: 10px;
+    
+    svg {
+      transform: scale(0.8);
+    }
+  }
+  
+  .my-courses-btn {
+    // padding: 6px 12px;
+    font-size: 11px;
+    min-width: 140px;
+  }
+}
+
+// برای صفحات بسیار بزرگ
+@media (min-width: 1400px) {
+  .roadmap-wrapper {
+    max-width: 768px;
+  }
+  
+  // .svg-container {
+  //   padding: 100px;
+  // }
+}
+
+// برای حالت landscape در موبایل
+@media (max-height: 600px) and (orientation: landscape) {
+  // .parent-container {
+  //   // padding: 10px;
+  // }
+  
+  .svg-container {
+    // padding: 20px;
+    
+    svg {
+      transform: scale(0.8);
+    }
+  }
+  
+  .button-container {
+    margin: 10px 0;
+  }
+}
+:host {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 20px;
+  max-width: 800px;
+  position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 15px;
+    width: 95%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+    width: 100%;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  width: 100%;
+  border: none;
+  border-radius: 0px 0px 10px 10px ;
+  padding: 12px 24px;
+  box-shadow: 0 8px 10px rgba(255, 126, 126, 0.3);
+  background: linear-gradient(90deg, #ffcb66, #ff7e7e);
+
+  
+  // h1 {
+  //   font-size: 2.5rem;
+  //   font-weight: bold;
+  //   color: #333;
+  //   margin: 0;
+  //   padding: 20px 0;
+    
+  //   @media (max-width: 768px) {
+  //     font-size: 2rem;
+  //     padding: 15px 0;
+  //   }
+    
+  //   @media (max-width: 480px) {
+  //     font-size: 1.8rem;
+  //     padding: 10px 0;
+  //   }
+  // }
+}
+
 .roadmap-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+
+  .controls {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 10px;
+    }
+  }
 }
 
-.svg-wrapper {
+.svg-container {
   width: 100%;
-  max-width: 800px;
-  margin-bottom: 30px;
+  box-sizing: border-box;
+
+  @media (max-width: 576px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 576px) {
+      transform: scale(0.9);
+    }
+
+    @media (max-width: 480px) {
+      transform: scale(0.85);
+    }
+  }
 }
 
 .button-container {
   text-align: center;
+  width: 100%;
+  margin: 15px 0;
+
+  @media (max-width: 768px) {
+    margin: 10px 0;
+  }
 }
 
 .my-courses-btn {
@@ -66,34 +369,36 @@
   background-color: #ff7e7e;
   color: white;
   border: none;
-  padding: 10px 18px;
+  padding: 12px 24px;
   border-radius: 10px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
+  min-width: 200px;
+  justify-content: center;
 
-.my-courses-btn:hover {
-  background-color: #ff5a5a;
-  // transform: translateY(-2px);
-}
-.svg-wrapper svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  margin: 0;
-  padding: 0;
-}
+  @media (max-width: 768px) {
+    padding: 10px 20px;
+    font-size: 13px;
+    min-width: 180px;
+  }
 
-.roadmap-container {
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-.parent-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  // gap: 10px; /* فاصله طبیعی و کم بین اجزا */
-}
+  @media (max-width: 700px) {
+    font-size: 12px;
+    min-width: 160px;
+  }
 
+  &:hover {
+    background-color: #ff5a5a;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    
+    @media (max-width: 480px) {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}

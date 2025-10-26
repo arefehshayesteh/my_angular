@@ -5,6 +5,7 @@ export interface SubGoal {
   name: string;
   done: boolean;
   locked: boolean;
+  targetDate: string; // اضافه کردن تاریخ به هر subgoal
 }
 
 export interface Goal {
@@ -13,7 +14,6 @@ export interface Goal {
   color: string;
   progress: number;
   subgoal: SubGoal[];
-  deadline: number;
 }
 
 @Injectable({
@@ -22,90 +22,49 @@ export interface Goal {
 export class DataService {
   private goalsData: Goal[] = [
     {
-      title: 'هدف اصلی',
+      title: 'هدف',
       description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
+      color: '#6a11cb',
       progress: 60,
-      deadline : 365,
       subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        { name: 'هدف ۳', done: false, locked: true },
-        { name: 'هدف 4', done: true, locked: false },
-        { name: 'هدف 5', done: false, locked: true },
-        { name: 'هدف 6', done: false, locked: true }
+        { name: 'هدف 1.1', done: true, locked: false, targetDate: '1404-08-04' },
+        { name: 'هدف 1.2', done: false, locked: true, targetDate: '1404-08-04' },
+        { name: 'هدف 1.3', done: false, locked: true, targetDate: '1404-08-06' },
+        { name: 'هدف 1.4', done: false, locked: true, targetDate: '1404-08-10' },
+        { name: 'هدف 1.5', done: false, locked: true, targetDate: '1404-08-15' },
+        { name: 'هدف 1.6', done: false, locked: true, targetDate: '1404-09-20' },
       ],
     },
     {
-      title: 'هدف 1',
+      title: 'هدف 2',
       description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
+      color: '#ff9100',
       progress: 60,
-      deadline : 10,
       subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
+        { name: 'هدف 2.1', done: true, locked: false, targetDate: '1404-08-10' },
+        { name: 'هدف 2.2', done: false, locked: true, targetDate: '1404-08-12' },
       ],
     },
     {
-      title: 'هدف2',
+      title: 'هدف3',
       description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
+      color: '#ff4c60',
       progress: 60,
-      deadline : 30,
-      subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
-      ],
-    },
-    {
-      title: 'هدف 3',
-      description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
-      progress: 60,
-      deadline : 40,
-      subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
+      subgoal: [ 
+        { name: 'هدف 3.1', done: true, locked: false, targetDate: '1404-08-04' },
+        { name: 'هدف 3.2', done: false, locked: true, targetDate: '1404-11-05' },
+        { name: 'هدف 3.3', done: false, locked: true, targetDate: '1404-11-10' },
+        { name: 'هدف 3.4', done: false, locked: true, targetDate: '1404-11-15' },
       ],
     },
     {
       title: 'هدف 4',
       description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
+      color: '#ffd500',
       progress: 60,
-      deadline : 20,
       subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
-      ],
-    },
-    {
-      title: 'هدف5',
-      description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
-      progress: 60,
-      deadline : 100,
-      subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
-      ],
-    },
-    {
-      title: 'هدف 6',
-      description: 'مطالعه دروس تخصصی کنکور',
-      color: '#FF7E7E',
-      progress: 60,
-      deadline : 730,
-      subgoal: [
-        { name: 'هدف ۱', done: true, locked: false },
-        { name: 'هدف ۲', done: false, locked: true },
-        
+        { name: 'هدف 4.1', done: true, locked: false, targetDate: '1405-03-03' },
+        { name: 'هدف 4.2', done: false, locked: true, targetDate: '1405-03-10' },
       ],
     },
   ];
