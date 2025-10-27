@@ -1,8 +1,10 @@
-:host {
+.host {
   display: block;
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  // min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .parent-container {
@@ -11,12 +13,12 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  padding: 20px;
+  padding:0;
   max-width: 800px;
   position: relative;
-  margin: 0 auto;
+  margin: 0 ;
   // box-sizing: border-box;
-  
+  gap: 0;
 
   @media (max-width: 768px) {
     padding: 15px;
@@ -239,42 +241,37 @@
     margin: 10px 0;
   }
 }
-:host {
-  display: block;
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
+.host {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  
 }
 
 .parent-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  padding: 20px;
-  max-width: 800px;
-  position: relative;
-  margin: 0 auto;
-  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
 
   @media (max-width: 768px) {
-    padding: 15px;
+    padding: 0 !important;
     width: 95%;
   }
 
   @media (max-width: 480px) {
-    padding: 10px;
+    padding: 0 !important;
     width: 100%;
   }
 }
 
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 0 !important; 
   width: 100%;
   border: none;
-  border-radius: 0px 0px 10px 10px ;
+  border-radius: 0px 0px 10px 10px;
   padding: 12px 24px;
   box-shadow: 0 8px 10px rgba(255, 126, 126, 0.3);
   background: linear-gradient(90deg, #ffcb66, #ff7e7e);
@@ -305,8 +302,10 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
+  margin: 0 !important; // تغییر مهم
+  padding: 0 !important;
+  gap: 0;
+  
 
   .controls {
     width: 100%;

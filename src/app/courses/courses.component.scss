@@ -176,13 +176,14 @@
 
 .bg{
  
-  background: linear-gradient(52deg, #ffffff, #cce8ff, #c5ceff, #9bacf7);
+  background: linear-gradient(10deg, #ffcc66bd, #ff7e7eb0);
   backdrop-filter: blur(5px);
   border: rgb(225, 225, 225, 0.2);
   font-size: 13px;
   font-weight: bold;
   z-index: 100;
 }
+
 @media (min-width: 600px){
   .bg{
     font-size: 20px;

@@ -237,6 +237,7 @@ export class RoadmapComponent implements AfterViewInit {
     console.log(`🎯 کلیک روی هدف: ${goal.title} با ${goal.subgoal.length} ساب‌گول`);
     this.selectedGoal = goal;
     this.showAllGoals = false;
+    localStorage.setItem('selectedGoalTitle', goal.title);
     this.loadSvgAndGeneratePoints();
   }
 
@@ -319,6 +320,7 @@ export class RoadmapComponent implements AfterViewInit {
   showAllGoalsView() {
     this.showAllGoals = true;
     this.selectedGoal = null;
+    localStorage.removeItem('selectedGoalTitle');
     this.loadSvgAndGeneratePoints();
   }
 }

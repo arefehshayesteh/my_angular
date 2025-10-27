@@ -1,4 +1,4 @@
-<div class="planning-container" (click)="closeAllMenus()">
+<div class="planning-container " (click)="closeAllMenus()">
   <div class="tabs">
     @for (tab of tabs; track tab) {
       <button [class.active]="tab === activeTab" (click)="setActive(tab)">
@@ -59,9 +59,10 @@
       </div>
     }
     
-      <button class="my-courses-btn button-container ">
-        دیدن دوره‌های من
-        <i class="bi bi-eye"></i>
-      </button>
+      
     </div>
+    <button class="my-courses-btn button-container ">
+      دیدن دوره‌های من
+      <i class="bi bi-eye"></i>
+    </button>
   </div>

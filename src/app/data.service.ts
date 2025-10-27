@@ -27,8 +27,8 @@ export class DataService {
       color: '#6a11cb',
       progress: 60,
       subgoal: [
-        { name: 'هدف 1.1', done: true, locked: false, targetDate: '1404-08-04' },
-        { name: 'هدف 1.2', done: false, locked: true, targetDate: '1404-08-04' },
+        { name: 'هدف 1.1', done: true, locked: false, targetDate: '1404-08-05' },
+        { name: 'هدف 1.2', done: false, locked: true, targetDate: '1404-08-05' },
         { name: 'هدف 1.3', done: false, locked: true, targetDate: '1404-08-06' },
         { name: 'هدف 1.4', done: false, locked: true, targetDate: '1404-08-10' },
         { name: 'هدف 1.5', done: false, locked: true, targetDate: '1404-08-15' },
@@ -41,7 +41,7 @@ export class DataService {
       color: '#ff9100',
       progress: 60,
       subgoal: [
-        { name: 'هدف 2.1', done: true, locked: false, targetDate: '1404-08-10' },
+        { name: 'هدف 2.1', done: true, locked: false, targetDate: '1404-08-5' },
         { name: 'هدف 2.2', done: false, locked: true, targetDate: '1404-08-12' },
       ],
     },
