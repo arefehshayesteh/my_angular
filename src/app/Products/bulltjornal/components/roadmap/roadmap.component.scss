@@ -1,0 +1,243 @@
+.host {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+}
+.d{
+  flex-direction: row;
+  display: flex;
+  justify-content: end;
+}
+.d1{
+  flex-direction: row;
+
+}
+
+.parent-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0;
+  max-width: 800px;
+  position: relative;
+  margin: 0;
+  gap: 0;
+
+  @media (max-width: 768px) {
+    padding: 0 !important;
+    width: 95%;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 !important;
+    width: 100%;
+  }
+}
+
+.roadmap-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0;
+
+  .controls {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    justify-content: start;
+    display: flex;
+
+    @media (max-width: 768px) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.svg-container {
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 576px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    max-width: 100%;
+
+    @media (max-width: 768px) {
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 576px) {
+      transform: scale(0.9);
+    }
+
+    @media (max-width: 480px) {
+      transform: scale(0.85);
+    }
+  }
+}
+
+.svg-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  max-width: 768px;
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.button-container {
+  text-align: center;
+  width: 100%;
+  margin: 15px 0;
+
+  @media (max-width: 768px) {
+    margin: 10px 0;
+  }
+}
+
+.my-courses-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 6px;
+  width: 5px;
+  gap: 8px;
+  background-color: #1300e7;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  justify-content: center;
+}
+/* From Uiverse.io by deepak16375 */ 
+.input {
+  max-width: 250px;
+  padding: 15px;
+  font-size: 10px;
+  color: black;
+  border-top-left-radius: .5em;
+  border-bottom-left-radius: .5em;
+  border: 2px solid #fff;
+
+}
+
+.button {
+  border: none;
+  background-color: #1363DF;
+  text-decoration: none;
+  padding: 15px;
+  padding-bottom: 17px;
+  font-size: 17px;
+  color: #fff;
+  border-top-right-radius: .5em;
+  border-bottom-right-radius: .5em;
+  cursor: pointer;
+}
+.button-green {
+  border: none;
+  background-color: #27f9c1;
+  padding: 15px;
+  font-size: 17px;
+  color: #fff;
+  border-bottom-right-radius: .5em;
+}
+.button-black {
+  border: none;
+  background-color: #000000;
+  text-decoration: none;
+  padding: 15px;
+  padding-bottom: 17px;
+  font-size: 17px;
+  color: #fff;
+  border-top-right-radius: .5em;
+  border-bottom-right-radius: .5em;
+  cursor: pointer;
+}
+
+.point-marker {
+  pointer-events: none;
+}
+
+.goal-tooltip {
+  pointer-events: none;
+  font-family: sans-serif;
+  font-weight: bold;
+  fill: #333;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 0 !important;
+  width: 100%;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  padding: 12px 24px;
+  box-shadow: 0 8px 10px rgba(54, 53, 53, 0.3);
+  background: linear-gradient(#dcdcdc, #ffffff, #dcdcdc);
+}
+
+/* 📱 ریسپانسیو */
+@media (max-width: 360px) {
+  .svg-container svg {
+    transform: scale(0.8);
+  }
+
+  .my-courses-btn {
+    font-size: 11px;
+    min-width: 140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .roadmap-wrapper {
+    max-width: 768px;
+  }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .svg-container svg {
+    transform: scale(0.8);
+  }
+
+  .button-container {
+    margin: 10px 0;
+  }
+}
+.row{
+  display: flex;
+  justify-content: end;
+}

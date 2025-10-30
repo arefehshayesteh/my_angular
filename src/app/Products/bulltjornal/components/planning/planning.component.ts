@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService, Goal, SubGoal } from '../data.service';
+import { DataService, Goal, SubGoal } from '../../services/data.service';
 
 interface DisplayItem {
   parentGoal: Goal;

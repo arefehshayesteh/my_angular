@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { RoadmapComponent } from './roadmap/roadmap.component';
-import { PlanningComponent } from './planning/planning.component';
-import { CoursesComponent } from './courses/courses.component';
-import { BulltjornalComponent } from "./bulltjornal/bulltjornal.component";
+import { RoadmapComponent } from './Products/bulltjornal/components/roadmap/roadmap.component';
+import { PlanningComponent } from './Products/bulltjornal/components/planning/planning.component';
+import { CoursesComponent } from './Products/bulltjornal/components/courses/courses.component';
+import { BulltjornalComponent } from './Products/bulltjornal/bulltjornal.component';
 
 @Component({
   selector: 'app-root',

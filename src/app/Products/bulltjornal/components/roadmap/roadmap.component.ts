@@ -1,13 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService, Goal } from '../data.service';
-
+import { DataService, Goal } from '../../services/data.service';
 @Component({
   selector: 'app-roadmap',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './roadmap.component.html',
   styleUrls: ['./roadmap.component.scss'],
+  
 })
 export class RoadmapComponent implements AfterViewInit {
   @ViewChild('svgContainer', { static: false }) svgContainer!: ElementRef;

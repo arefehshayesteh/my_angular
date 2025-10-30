@@ -1,4 +1,8 @@
 <div class="planning-container " (click)="closeAllMenus()">
+  <div class="col-5  sshadow  rounded-3 d-flex justify-content-center  bg start-50 position-absolute ">
+    <p class=" my-auto py-1 ">مهارت هایی که نیاز دارید</p>
+  </div>
+  
   <div class="tabs">
     @for (tab of tabs; track tab) {
       <button [class.active]="tab === activeTab" (click)="setActive(tab)">
