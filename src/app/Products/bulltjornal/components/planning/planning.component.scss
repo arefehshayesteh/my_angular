@@ -9,32 +9,9 @@
     text-align: center;
     position: relative;
     overflow: visible; // تغییر از hidden به visible
-  backdrop-filter: blur(5px);
-  border: rgb(225, 225, 225, 0.2);
+  backdrop-filter: blur(8px);
+  border: rgba(225, 225, 225, 0.090);
 
-    // گرادینت‌های تزئینی
-    &::before,
-    &::after {
-      content: '';
-      position: absolute;
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      filter: blur(50px);
-      z-index: 0;
-    }
-  
-    &::before {
-      top: -40px;
-      right: -40px;
-      background: rgba(255, 204, 102, 0.4);
-    }
-  
-    &::after {
-      bottom: -40px;
-      left: -40px;
-      background: rgba(255, 126, 126, 0.3);
-    }
   
     .tabs {
       display: flex;
@@ -388,3 +365,38 @@
   .button-container {
     margin: 1px 1;
   }
+  .title-box {
+  top: -20px; /* موقعیت بالاتر از container */
+  right: 160px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  padding: 4px 16px;
+  border-radius: 5rem;
+  position: absolute;
+  z-index: 10;
+   backdrop-filter: blur(200px);
+   background-color: #ffffff80;
+
+  p {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+}
+
+.button{
+  display: inline-flex;
+  align-items: center;
+  height: 3px;
+  width: 100px;
+  background-color: #02768d;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  justify-content: center;
+
+}

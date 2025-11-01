@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RoadmapComponent } from './Products/bulltjornal/components/roadmap/roadmap.component';
 import { PlanningComponent } from './Products/bulltjornal/components/planning/planning.component';
 import { CoursesComponent } from './Products/bulltjornal/components/courses/courses.component';
-import { BulltjornalComponent } from './Products/bulltjornal/bulltjornal.component';
+import { BulltjornalComponent } from './Products/bulltjornal/pages/bulltjornal.component';
 
 @Component({
   selector: 'app-root',

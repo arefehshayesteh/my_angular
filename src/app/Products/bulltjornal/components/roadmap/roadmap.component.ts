@@ -200,8 +200,8 @@ export class RoadmapComponent implements AfterViewInit {
         tooltipGroup.style.cursor = 'pointer';
 
         const tooltipBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        tooltipBg.setAttribute('x', (x - 30).toString());
-        tooltipBg.setAttribute('y', (y - 70).toString());
+        tooltipBg.setAttribute('x', (x - 35).toString());
+        tooltipBg.setAttribute('y', (y - 65).toString());
         tooltipBg.setAttribute('width', '60');
         tooltipBg.setAttribute('height', '15');
         tooltipBg.setAttribute('rx', '10');
@@ -212,8 +212,8 @@ export class RoadmapComponent implements AfterViewInit {
         tooltipBg.style.cursor = 'pointer';
 
         const tooltipText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        tooltipText.setAttribute('x', (x - 12).toString());
-        tooltipText.setAttribute('y', (y - 58).toString());
+        tooltipText.setAttribute('x', (x+10 ).toString());
+        tooltipText.setAttribute('y', (y - 55).toString());
         tooltipText.setAttribute('fill', '#333');
         tooltipText.setAttribute('font-size', '10');
         tooltipText.setAttribute('font-weight', 'bold');
